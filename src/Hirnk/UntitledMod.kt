@@ -1,6 +1,6 @@
-package hirnk
+package Hirnk
 
-import hirnk.src.content.UntiltedBlocks
+import Hirnk.src.content.UntiltedBlocks
 import mindustry.mod.Mod
 
 class UntiltedMod : Mod() {
