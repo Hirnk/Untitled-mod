@@ -1,12 +1,12 @@
 displayName: "Untilted-mod"
 name: "Untilted-mod"
-author: "Hirnk"
-main: "Hirnk.UntiltedMod"
-repo: "Hirnk/Untilted-mod"
+author: "hirnk"
+main: "hirnk.UntiltedMod"
+repo: "hirnk/Untilted-mod"
 subtitle: ""
 description: ""
 version: "1.0"
-minGameVersion: "141"
+minGameVersion: "146"
 java: true
 hidden: false
 dependencies: []
