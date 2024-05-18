@@ -5,14 +5,13 @@ import mindustry.type.Category
 import mindustry.type.ItemStack
 import mindustry.world.Block
 import mindustry.world.blocks.liquid.LiquidRouter
-import Hirnk.src.world.block.LiquidCell
 
 object UntiltedBlocks {
     lateinit var copperTank: Block
     lateinit var copperTankBig: Block
 
     fun load() {
-        copperTank = LiquidCell("copper-tank-2").apply {
+        copperTank = LiquidRouter("copper-tank-2").apply {
             requirements(Category.liquid, ItemStack.with(Items.copper, 45, Items.lead, 20))
             health = 550
             size = 2
