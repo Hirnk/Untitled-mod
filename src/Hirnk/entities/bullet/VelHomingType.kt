@@ -2,14 +2,12 @@ package Hirnk.entities.bullet
 
 import arc.util.Time
 import arc.util.Tmp
-import mindustry.Vars
 import mindustry.entities.Units
 import mindustry.entities.bullet.BasicBulletType
 import mindustry.gen.Building
 import mindustry.gen.Bullet
 import mindustry.gen.Teamc
 import mindustry.gen.Unit
-import kotlin.math.pow
 
 class VelHomingType : BasicBulletType() {
     var homingPower2 = 0.2f

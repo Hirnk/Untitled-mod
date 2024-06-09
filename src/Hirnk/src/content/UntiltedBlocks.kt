@@ -5,7 +5,6 @@ import mindustry.content.Fx
 import mindustry.content.Items
 import mindustry.content.Liquids
 import mindustry.content.StatusEffects
-import mindustry.entities.bullet.BasicBulletType
 import mindustry.entities.effect.MultiEffect
 import mindustry.entities.effect.WaveEffect
 import mindustry.entities.pattern.ShootSpread
