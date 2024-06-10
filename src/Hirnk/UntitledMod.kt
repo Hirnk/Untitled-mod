@@ -1,12 +1,18 @@
 package Hirnk
 
-import Hirnk.src.content.UntiltedBlocks
-import Hirnk.src.content.UntiltedFluids
+import Hirnk.src.content.UntitledBlocks
+import Hirnk.src.content.UntitledFluids
+import Hirnk.src.content.UntitledUnitTypes
+import Hirnk.src.gen.OreItemGen
 import mindustry.mod.Mod
 
-class UntiltedMod : Mod() {
+class UntitledMod : Mod() {
+
+
     override fun loadContent() {
-        UntiltedFluids.load()
-        UntiltedBlocks.load()
+        OreItemGen.load()
+        UntitledFluids.load()
+        UntitledBlocks.load()
+        UntitledUnitTypes.load()
     }
 }

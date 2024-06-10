@@ -14,5 +14,5 @@
 - [ ] Put sprites and bundles into [assets](assets) directory.
 - [ ] Check the Mindustry's sources with your IDE or on its [repository](https://github.com/Anuken/Mindustry).
 - [ ] Make a nice [icon](icon.png) to replace the placeholder.
-- [ ] Dispatch [`Create Draft Release` workflow](https://github.com/Hirnk/Untilted-mod/actions/workflows/ReleaseDraft.yaml) to generate a release draft on [GitHub](https://github.com/Hirnk/Untilted-mod/releases).
+- [ ] Dispatch [`Create Draft Release` workflow](https://github.com/Hirnk/Untitled-mod/actions/workflows/ReleaseDraft.yaml) to generate a release draft on [GitHub](https://github.com/Hirnk/Untilted-mod/releases).
 - [ ] Learn how to use [MGPP](https://plumygames.github.io/mgpp/) to boost your modding.

@@ -1,10 +1,7 @@
 package Hirnk.src.content
 
 import Hirnk.entities.bullet.VelHomingType
-import mindustry.content.Fx
-import mindustry.content.Items
-import mindustry.content.Liquids
-import mindustry.content.StatusEffects
+import mindustry.content.*
 import mindustry.entities.effect.MultiEffect
 import mindustry.entities.effect.WaveEffect
 import mindustry.entities.pattern.ShootSpread
@@ -14,14 +11,18 @@ import mindustry.type.Category
 import mindustry.type.ItemStack
 import mindustry.world.Block
 import mindustry.world.blocks.defense.turrets.PowerTurret
+import mindustry.world.blocks.environment.SteamVent
 import mindustry.world.blocks.liquid.LiquidRouter
+import mindustry.world.meta.Attribute
 
-object UntiltedBlocks {
+object UntitledBlocks {
     //turret
     lateinit var concentrate: Block
     //fluid
     lateinit var copperTank: Block
     lateinit var copperTankBig: Block
+    //env
+    lateinit var vent: Block
 
     fun load() {
         concentrate = PowerTurret("concentrate").apply {
@@ -77,7 +78,6 @@ object UntiltedBlocks {
                 intervalBullet = VelHomingType().apply {
                     trailLength = 4
                     trailColor = Pal.lancerLaser
-                    speed = 4f
                     backColor = Pal.lancerLaser
                     homingDelay = 20f
                     speed = 4f
@@ -85,7 +85,7 @@ object UntiltedBlocks {
                     hitEffect = Fx.hitLancer
                     despawnEffect = Fx.hitLancer
                     lifetime = 60f
-                    homingPower2 = 0.4f
+                    homingPower2 = 1.5f
                     status = StatusEffects.shocked
                     damage = 15f
                     homingRange = 400f
@@ -101,6 +101,7 @@ object UntiltedBlocks {
             size = 2
             liquidCapacity = 500f
             squareSprite = false
+            liquidPadding = 3f
         }
 
         copperTankBig = LiquidRouter("copper-tank-4").apply {
@@ -110,8 +111,13 @@ object UntiltedBlocks {
             size = 4
             liquidCapacity = 2200f
             squareSprite = false
+            liquidPadding = 8f
+        }
 
-            consumeLiquid(Liquids.water, 0.5f)
+        vent = SteamVent("vent").apply {
+            parent = Blocks.basalt
+            blendGroup = Blocks.basalt
+            attributes.set(Attribute.steam, 1f)
         }
     }
 }

@@ -3,7 +3,7 @@ package Hirnk.src.content
 import arc.graphics.Color
 import mindustry.type.Liquid
 
-object UntiltedFluids {
+object UntitledFluids {
     lateinit var steam: Liquid
 
     fun load() {
