@@ -1,7 +1,10 @@
 package Hirnk.src.content
 
-import Hirnk.entities.bullet.VelHomingType
-import mindustry.content.*
+import Hirnk.src.bullet.VelHomingType
+import mindustry.content.Blocks
+import mindustry.content.Fx
+import mindustry.content.Items
+import mindustry.content.StatusEffects
 import mindustry.entities.effect.MultiEffect
 import mindustry.entities.effect.WaveEffect
 import mindustry.entities.pattern.ShootSpread

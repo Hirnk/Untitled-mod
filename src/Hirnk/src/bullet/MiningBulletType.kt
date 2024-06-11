@@ -1,4 +1,4 @@
-package Hirnk.entities.bullet
+package Hirnk.src.bullet
 
 import arc.math.geom.Position
 import mindustry.Vars.tilesize

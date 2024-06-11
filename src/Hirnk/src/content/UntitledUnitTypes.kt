@@ -1,6 +1,6 @@
 package Hirnk.src.content
 
-import Hirnk.entities.bullet.MiningBulletType
+import Hirnk.src.bullet.MiningBulletType
 import arc.func.Prov
 import mindustry.content.Fx
 import mindustry.gen.UnitEntity

@@ -2,16 +2,16 @@ package Hirnk.src.gen
 
 import arc.Core
 import arc.graphics.Pixmap
+import arc.graphics.Texture
+import arc.graphics.g2d.TextureRegion
 import arc.math.Rand
 import arc.struct.ObjectMap
 import arc.struct.Seq
 import mindustry.content.Items
 import mindustry.type.Item
+import plumy.texture.*
 
 object OreItemGen {
-    val rand = Rand()
-    val templates = 1
-    val alpha = 0.5f
 
     val list = Seq(arrayOf(
         Items.copper,
@@ -23,27 +23,51 @@ object OreItemGen {
     val map = ObjectMap<Item, Item>()
 
     fun load() {
-        generate()
-        generateTexture()
-    }
-
-    fun generate() {
         list.forEach {
-            map.put(it, Item("ore-${it.name}").apply {
-                hardness = it.hardness
-                cost = it.cost
-                explosiveness = it.explosiveness
-                radioactivity = it.radioactivity
-                healthScaling = it.healthScaling
-            })
+            map.put(it, RawOre(it))
         }
     }
 
-    fun generateTexture() {
+    object OreIconGenerator {
+        val rand = Rand()
+        val templates = 1
+        val alpha = 0.5f
+        val bakery = StackIconBakery(32, 32).apply {
+            postProcessors.add(AntiAliasingLayerProcessor)
+        }
+
         val bases = Array<Pixmap>(templates) {
-            return@Array Core.atlas.getPixmap("ore-template$it").pixmap
+            return@Array Core.atlas.getPixmap("ore-template").pixmap
         }
-        list.forEach {
+
+        fun generate(ore: Item): TextureRegion {
+            rand.setSeed(ore.id.toLong())
+            val l = rand.random(templates - 1)
+            val layer = Layer(bases[l].toLayerBuffer()) {
+                +TintBlendLayerProcessor(ore.color.cpy().a(alpha))
+            }
+            val pLayer = bakery.bake(layer)
+            return TextureRegion(Texture(pLayer.createPixmap()))
+        }
+    }
+
+    class RawOre(source: Item) : Item("oregen-${source.name}") {
+        init {
+            localizedName = "${source.localizedName} ${Core.bundle.get("untitled-ore")}"
+            color = source.color
+            flammability = source.flammability
+            explosiveness = source.explosiveness
+            hardness = source.hardness
+            charge = source.charge
+            radioactivity = source.radioactivity * 0.3f
+            healthScaling = source.healthScaling * 0.5f
+            cost = source.cost * 0.8f
+        }
+
+        override fun loadIcon() {
+            val icon = OreIconGenerator.generate(this)
+            fullIcon = icon
+            uiIcon = icon
         }
     }
 }
