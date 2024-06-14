@@ -24,6 +24,7 @@ dependencies{
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "com.github.plumygames.mktx:core:7a1dc3ff54"
     implementation "com.github.plumygames.mktx:texture:7a1dc3ff54"
+    implementation "com.github.plumygames.mktx:dsl:7a1dc3ff54"
 }
 mindustry {
     dependency {

@@ -1,10 +1,9 @@
 package Hirnk.src.content
 
-import Hirnk.src.bullet.VelHomingType
-import mindustry.content.Blocks
-import mindustry.content.Fx
-import mindustry.content.Items
-import mindustry.content.StatusEffects
+import Hirnk.src.entities.bullet.VelHomingType
+import Hirnk.src.world.block.crafter.MultiCrafter
+import Hirnk.src.world.block.crafter.recipe.Recipe
+import mindustry.content.*
 import mindustry.entities.effect.MultiEffect
 import mindustry.entities.effect.WaveEffect
 import mindustry.entities.pattern.ShootSpread
@@ -16,6 +15,8 @@ import mindustry.world.Block
 import mindustry.world.blocks.defense.turrets.PowerTurret
 import mindustry.world.blocks.environment.SteamVent
 import mindustry.world.blocks.liquid.LiquidRouter
+import mindustry.world.blocks.storage.CoreBlock
+import mindustry.world.consumers.ConsumeItems
 import mindustry.world.meta.Attribute
 
 object UntitledBlocks {
@@ -24,6 +25,10 @@ object UntitledBlocks {
     //fluid
     lateinit var copperTank: Block
     lateinit var copperTankBig: Block
+    //crafter
+    lateinit var millstone: Block
+    //core
+    lateinit var coreShelter: Block
     //env
     lateinit var vent: Block
 
@@ -115,6 +120,38 @@ object UntitledBlocks {
             liquidCapacity = 2200f
             squareSprite = false
             liquidPadding = 8f
+        }
+
+        millstone = MultiCrafter("furnace").apply {
+            requirements(Category.crafting, ItemStack.with(Items.copper, 80, Items.lead, 20))
+            health = 750
+            size = 3
+            recipes.add(Recipe().apply {
+                consumers.add(ConsumeItems(ItemStack.with(Items.copper, 1)))
+                outputItems.add(ItemStack(Items.lead, 1))
+                name = "Your"
+            })
+            recipes.add(Recipe().apply {
+                consumers.add(ConsumeItems(ItemStack.with(Items.titanium, 1)))
+                outputItems.add(ItemStack(Items.thorium, 1))
+                name = "Mother"
+            })
+        }
+
+        coreShelter = CoreBlock("core-shelter").apply {
+            requirements(Category.effect, ItemStack.with(Items.copper, 300))
+            isFirstTier = true
+            unitType = UnitTypes.gamma
+            health = 8000
+            itemCapacity = 800
+            size = 3
+            armor = 3f
+            alwaysUnlocked = true
+            incinerateNonBuildable = true
+            requiresCoreZone = true
+            buildCostMultiplier = 0.5f
+            unitCapModifier = 4
+            researchCostMultiplier = 0.05f
         }
 
         vent = SteamVent("vent").apply {

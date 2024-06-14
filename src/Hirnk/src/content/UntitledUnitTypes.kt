@@ -1,10 +1,8 @@
 package Hirnk.src.content
 
-import Hirnk.src.bullet.MiningBulletType
 import arc.func.Prov
-import mindustry.content.Fx
 import mindustry.gen.UnitEntity
-import mindustry.graphics.Pal
+import mindustry.graphics.Layer
 import mindustry.type.UnitType
 import mindustry.type.Weapon
 
@@ -15,29 +13,32 @@ object UntitledUnitTypes {
         prospector = UnitType("prospector").apply {
             flying = true
             drag = 0.03f
-            accel = 0.08f
-            speed = 1.2f
-            health = 280f
+            accel = 0.07f
+            speed = 1.8f
+            health = 680f
+            armor = 4f
+            hitSize = 25f
             isEnemy = false
+            engineSize = 3.2f
+            engineOffset = 40f / 4f
+            itemCapacity = 80
+            trailLength = 12
+            trailScl = 0.75f
+            lowAltitude = true
+            engineLayer = Layer.flyingUnit - 0.01f
+
+            setEnginesMirror(
+                UnitType.UnitEngine(32f / 4f, -32f / 4f, 2.4f, 280f)
+            )
+
             constructor = Prov { UnitEntity.create() }
 
-            weapons.add(Weapon().apply {
-                reload = 30f
-                bullet = MiningBulletType().apply {
-                    trailLength = 4
-                    trailColor = Pal.bulletYellowBack
-                    backColor = Pal.bulletYellowBack
-                    speed = 3f
-                    width = 8f
-                    hitEffect = Fx.blastExplosion
-                    hitShake = 2f
-                    despawnEffect = Fx.hitLancer
-                    lifetime = 60f
-                    homingPower2 = 3f
-                    damage = 45f
-                    homingRange = 400f
+            weapons.add(
+                Weapon("untitled-prospector-beam").apply {
+                    x = 0f
+                    mirror = false
                 }
-            })
+            )
         }
     }
 }

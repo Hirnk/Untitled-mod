@@ -24,11 +24,16 @@ object OreItemGen {
 
     val rawOre = ObjectMap<Item, Item>()
     val orePulver = ObjectMap<Item, Item>()
+    val all = ArrayList<Item>()
 
     fun load() {
         list.forEach {
-            rawOre.put(it, RawOre(it))
-            orePulver.put(it, OrePulver(it))
+            val raw = RawOre(it)
+            val pulver = OrePulver(it)
+            rawOre.put(it, raw)
+            orePulver.put(it, pulver)
+            all += raw
+            all += pulver
         }
     }
 
@@ -36,8 +41,9 @@ object OreItemGen {
         val rand = Rand()
         val oreTemplates = 1
         val orePulverTemplates = 1
-        val alpha = 0.4f
-        val saturation = 15
+        var alpha = 0.6f
+        var saturation = 10
+        var brightness = 0
         val bakery = StackIconBakery(32, 32).apply {
             postProcessors.add(AntiAliasingLayerProcessor)
         }
@@ -58,7 +64,7 @@ object OreItemGen {
             val l = rand.random(oreTemplates - 1)
             val layer = Layer(oreBase[l].toLayerBuffer()) {
                 +TintBlendLayerProcessor(ore.color.cpy().a(alpha))
-                +HSVLayerProcessor(s = saturation)
+                +HSVLayerProcessor(s = saturation, v = brightness)
             }
             val pLayer = bakery.bake(layer)
             return TextureRegion(Texture(pLayer.createPixmap()))
@@ -68,7 +74,7 @@ object OreItemGen {
             val l = rand.random(orePulverTemplates - 1)
             val layer = Layer(pulverBase[l].toLayerBuffer()) {
                 +TintBlendLayerProcessor(pulver.color.cpy().a(alpha))
-                +HSVLayerProcessor(s = saturation)
+                +HSVLayerProcessor(s = saturation, v = brightness)
             }
             val pLayer = bakery.bake(layer)
             return TextureRegion(Texture(pLayer.createPixmap()))

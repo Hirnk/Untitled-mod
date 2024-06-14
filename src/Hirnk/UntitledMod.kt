@@ -20,5 +20,10 @@ class UntitledMod : Mod() {
         UntitledFluids.load()
         UntitledBlocks.load()
         UntitledUnitTypes.load()
+        //UntitledPlanets.load() - disabled for testing
+    }
+
+    override fun init() {
+        //DebugDialog.show()
     }
 }

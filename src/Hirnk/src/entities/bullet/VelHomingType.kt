@@ -1,4 +1,4 @@
-package Hirnk.src.bullet
+package Hirnk.src.entities.bullet
 
 import arc.math.geom.Position
 import arc.util.Time
