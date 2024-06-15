@@ -3,6 +3,7 @@ package Hirnk.src.content
 import Hirnk.src.entities.bullet.VelHomingType
 import Hirnk.src.world.block.crafter.MultiCrafter
 import Hirnk.src.world.block.crafter.recipe.Recipe
+import Hirnk.src.world.block.crafter.recipe.RecipeProgress
 import mindustry.content.*
 import mindustry.entities.effect.MultiEffect
 import mindustry.entities.effect.WaveEffect
@@ -26,7 +27,7 @@ object UntitledBlocks {
     lateinit var copperTank: Block
     lateinit var copperTankBig: Block
     //crafter
-    lateinit var millstone: Block
+    lateinit var furnace: Block
     //core
     lateinit var coreShelter: Block
     //env
@@ -122,20 +123,24 @@ object UntitledBlocks {
             liquidPadding = 8f
         }
 
-        millstone = MultiCrafter("furnace").apply {
+        furnace = MultiCrafter("furnace").apply {
             requirements(Category.crafting, ItemStack.with(Items.copper, 80, Items.lead, 20))
             health = 750
             size = 3
-            recipes.add(Recipe().apply {
-                consumers.add(ConsumeItems(ItemStack.with(Items.copper, 1)))
-                outputItems.add(ItemStack(Items.lead, 1))
-                name = "Your"
-            })
-            recipes.add(Recipe().apply {
-                consumers.add(ConsumeItems(ItemStack.with(Items.titanium, 1)))
-                outputItems.add(ItemStack(Items.thorium, 1))
-                name = "Mother"
-            })
+            recipes.add(
+                Recipe().apply {
+                    progresses += RecipeProgress().apply {
+                        consumers.add(ConsumeItems(ItemStack.with(Items.copper, 1)))
+                        outputItems.add(ItemStack(Items.tungsten, 2))
+                    }
+                    progresses += RecipeProgress().apply {
+                        consumers.add(ConsumeItems(ItemStack.with(Items.coal, 1)))
+                        outputItems.add(ItemStack(Items.graphite, 3))
+                        craftTime = 80f
+                        craftEffect = Fx.smokePuff
+                    }
+                }
+            )
         }
 
         coreShelter = CoreBlock("core-shelter").apply {

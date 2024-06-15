@@ -8,12 +8,12 @@ import arc.math.Interp
 import mindustry.Vars
 import mindustry.Vars.tilesize
 import mindustry.content.Fx
+import mindustry.core.World
 import mindustry.entities.Damage
 import mindustry.entities.bullet.BulletType
 import mindustry.gen.Bullet
 import mindustry.graphics.Drawf
 import plumy.core.assets.TR
-import plumy.dsl.tile
 
 class PointMinerBulletType : BulletType() {
     var color = Color.white
@@ -44,7 +44,7 @@ class PointMinerBulletType : BulletType() {
 
         Damage.collidePoint(b, b.team, hitEffect, b.aimX, b.aimY)
 
-        val t = Vars.world.tile(b.aimX / tilesize, b.aimY / tilesize)
+        val t = Vars.world.tile(World.toTile(b.aimX), World.toTile(b.aimY))
         if (t != null) {
             val d = t.overlay().itemDrop
             if (d != null) {

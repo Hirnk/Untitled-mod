@@ -12,57 +12,68 @@ import mindustry.world.Block
 import mindustry.world.consumers.Consume
 
 open class Recipe() {
+    val progresses = ArrayList<RecipeProgress>()
+
+    fun bars(b: Block) {}
+}
+
+class RecipeProgress() {
     val consumers = ArrayList<Consume>()
     val outputItems = ArrayList<ItemStack>()
     val outputFluids = ArrayList<LiquidStack>()
     var craftTime = 60f
     var craftEffect = Fx.smeltsmoke
-    var name = ""
-    var optional = false
-    var boost = false
-
-    fun bars(b: Block) {}
 }
 
-class RecipeHandler(val r: Recipe,val building: Building) {
-    var progress = 0f
+open class RecipeHandler(
+    open val r: Recipe,
+    open val building: Building
+) {
+    var progress = FloatArray(r.progresses.size) { 0f }
 
-    fun craft() = building.run {
-        r.outputItems.forEach { for (i in 0 until it.amount) offload(it.item) }
-        r.consumers.forEach { it.trigger(this) }
-        progress %= 1f
-        if (wasVisible) r.craftEffect.at(x, y)
+    fun craft(p: RecipeProgress) = building.run {
+        p.outputItems.forEach { for (i in 0 until it.amount) offload(it.item) }
+        p.consumers.forEach { it.trigger(this) }
+        if (wasVisible) p.craftEffect.at(x, y)
     }
 
     fun update() = building.run {
-        progress += getProgressIncrease(r.craftTime)
-
-        if (r.outputFluids.isNotEmpty()) {
-            val inc = getProgressIncrease(1f)
-            r.outputFluids.forEach {
-                handleLiquid(this, it.liquid, it.amount * inc)
+        progress.forEachIndexed{ i, _ ->
+            val p = r.progresses[i]
+            progress[i] += getProgressIncrease(p.craftTime)
+            if (p.outputFluids.isNotEmpty()) {
+                val inc = getProgressIncrease(1f)
+                p.outputFluids.forEach {
+                    handleLiquid(this, it.liquid, it.amount * inc)
+                }
+            }
+            if (progress[i] >= 1f) {
+                progress[i] %= 1f
+                craft(p)
             }
         }
-
-        if (progress >= 1f) craft()
     }
 
     fun efficiency(): Float {
         var e = 1f
-        r.consumers.forEach { e *= it.efficiency(building) }
+        r.progresses.forEach { it.consumers.forEach { e *= it.efficiency(building) } }
         return e
     }
 
     fun efficiencyScale(): Float {
         var e = 1f
-        r.consumers.forEach { e += (it.efficiencyMultiplier(building) - 1f) }
+        r.progresses.forEach { it.consumers.forEach { e *= it.efficiency(building) } }
         return e
     }
 
     fun buildTable(table: Table) {
-        r.consumers.forEach { it.build(building, table) }
+        r.progresses.forEach {
+            it.consumers.forEach { it.build(building, table) }
+        }
         table.image(Icon.right)
-        r.outputItems.forEach { table.add(ItemDisplay(it.item, it.amount, r.craftTime, false)) }
-        r.outputFluids.forEach { table.add(LiquidDisplay(it.liquid, it.amount, true)) }
+        r.progresses.forEach { p ->
+            p.outputItems.forEach { table.add(ItemDisplay(it.item, it.amount, p.craftTime, false)) }
+            p.outputFluids.forEach { table.add(LiquidDisplay(it.liquid, it.amount, true)) }
+        }
     }
 }

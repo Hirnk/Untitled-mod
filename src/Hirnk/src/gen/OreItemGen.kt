@@ -19,7 +19,9 @@ object OreItemGen {
         Items.copper,
         Items.lead,
         Items.titanium,
-        Items.thorium
+        Items.thorium,
+        Items.beryllium,
+        Items.tungsten
     ))
 
     val rawOre = ObjectMap<Item, Item>()

@@ -36,7 +36,7 @@ class MultiCrafter(name: String) : Block(name) {
 
     override fun init() {
         super.init()
-        recipes.forEach { it.consumers.forEach { it.apply(this) }}
+        recipes.forEach { it.progresses.forEach { it.consumers.forEach { it.apply(this) } }}
     }
 
     override fun setBars() {
