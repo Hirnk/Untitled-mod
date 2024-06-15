@@ -5,6 +5,7 @@ import arc.Core
 import arc.graphics.Color
 import arc.graphics.g2d.Draw
 import arc.math.Interp
+import arc.util.Tmp
 import mindustry.Vars
 import mindustry.Vars.tilesize
 import mindustry.content.Fx
@@ -23,6 +24,7 @@ class PointMinerBulletType : BulletType() {
     var mineTier = 2
     var mineAmt = 3
     var mineEffect = UntitledFx.mineOre
+    var length = 100f
 
     lateinit var laser: TR
     lateinit var laserEnd: TR
@@ -39,9 +41,20 @@ class PointMinerBulletType : BulletType() {
         absorbable = false
     }
 
+    override fun init() {
+        super.init()
+        range = length
+    }
+
     override fun init(b: Bullet) {
         super.init(b)
 
+        Tmp.v1.set(b.aimX, b.aimY).sub(b.x, b.y).limit(length).add(b.x, b.y)
+
+        b.data = Tmp.v1
+
+        b.aimX = Tmp.v1.x
+        b.aimY = Tmp.v1.y
         Damage.collidePoint(b, b.team, hitEffect, b.aimX, b.aimY)
 
         val t = Vars.world.tile(World.toTile(b.aimX), World.toTile(b.aimY))

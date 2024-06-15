@@ -45,7 +45,6 @@ object UntitledUnitTypes {
                     reload = 80f
                     cooldownTime = 60f
                     parts.add(StaticPart())
-                    range = 110f
                     shootSound = Sounds.blaster
 
                     bullet = PointMinerBulletType().apply {
@@ -61,6 +60,7 @@ object UntitledUnitTypes {
                         )
                         damage = 50f
                         status = StatusEffects.shocked
+                        range = 100f
                     }
                 }
             )
