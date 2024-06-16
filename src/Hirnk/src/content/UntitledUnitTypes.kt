@@ -31,6 +31,7 @@ object UntitledUnitTypes {
             trailLength = 12
             trailScl = 0.75f
             lowAltitude = true
+            range = 160f
 
             setEnginesMirror(
                 UnitType.UnitEngine(32f / 4f, -32f / 4f, 2.4f, 280f)
@@ -50,6 +51,7 @@ object UntitledUnitTypes {
                     bullet = PointMinerBulletType().apply {
                         lifetime = 20f
                         parentizeEffects = false
+                        hitEffect = Fx.hitLancer
                         shootEffect = MultiEffect(
                             UntitledFx.mineLaserShoot,
                             Fx.shootSmokeSquareSparse
@@ -60,7 +62,7 @@ object UntitledUnitTypes {
                         )
                         damage = 50f
                         status = StatusEffects.shocked
-                        range = 100f
+                        length = 155f
                     }
                 }
             )

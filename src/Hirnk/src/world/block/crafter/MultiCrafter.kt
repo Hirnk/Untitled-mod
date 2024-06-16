@@ -1,5 +1,7 @@
 package Hirnk.src.world.block.crafter
 
+import Hirnk.src.world.block.crafter.recipe.Recipe
+import Hirnk.src.world.block.crafter.recipe.RecipeHandler
 import arc.Core
 import arc.func.Prov
 import arc.scene.ui.layout.Table
@@ -10,11 +12,12 @@ import mindustry.gen.Tex
 import mindustry.ui.Styles
 import mindustry.world.Block
 import mindustry.world.meta.BlockFlag
+import plumy.core.math.approachDelta
 import plumy.dsl.config
-import Hirnk.src.world.block.crafter.recipe.*
 
 class MultiCrafter(name: String) : Block(name) {
     val recipes = ArrayList<Recipe>()
+    var warmupSpeed = 0.1f
 
     init {
         update = true
@@ -46,20 +49,27 @@ class MultiCrafter(name: String) : Block(name) {
 
     inner class MultiCrafterBuild : Building() {
         val handlers = Array(recipes.size) { RecipeHandler(recipes[it], this) }
+        var warmup = 0f
         var currentRecipe = -1 //selected recipe, -1 for no recipe selected
 
         fun active() = currentRecipe != -1
 
         override fun updateTile() {
-            if (!active()) return
+            if (!active()) {
+                warmup = warmup.approachDelta(0f, warmupSpeed)
+                return
+            }
 
             efficiency(handlers[currentRecipe].efficiency())
             handlers[currentRecipe].update()
+            warmup = warmup.approachDelta(efficiency().coerceAtMost(1f), warmupSpeed)
         }
 
         override fun efficiencyScale(): Float {
             return if (active()) handlers[currentRecipe].efficiencyScale() else 0f
         }
+
+        override fun warmup(): Float = warmup
 
         override fun config() = currentRecipe
 
@@ -75,7 +85,7 @@ class MultiCrafter(name: String) : Block(name) {
                             .update { it.isChecked = currentRecipe == i }
                             .growX().fillY().pad(4f).marginTop(5f).marginBottom(5f).row()
                     }
-                }.expandX()
+                }
             }
         }
     }
