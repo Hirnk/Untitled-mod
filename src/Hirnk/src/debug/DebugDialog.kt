@@ -6,7 +6,7 @@ import arc.scene.ui.layout.Table
 import mindustry.ui.dialogs.BaseDialog
 
 object DebugDialog {
-    fun show() {
+    fun oreGenerator() {
         BaseDialog("Debug Icon Generating").apply {
             val icons = Table()
             fun rebuild() {
@@ -58,5 +58,10 @@ object DebugDialog {
                 reload()
             }
         }.show()
+    }
+    fun researchLab() {
+        BaseDialog("Research").apply {
+
+        }
     }
 }

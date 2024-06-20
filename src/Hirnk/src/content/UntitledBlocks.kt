@@ -4,6 +4,7 @@ import Hirnk.src.entities.bullet.VelHomingType
 import Hirnk.src.world.block.crafter.MultiCrafter
 import Hirnk.src.world.block.crafter.recipe.Recipe
 import Hirnk.src.world.block.crafter.recipe.RecipeProgress
+import Hirnk.src.world.block.storage.UntitledCore
 import mindustry.content.*
 import mindustry.entities.effect.MultiEffect
 import mindustry.entities.effect.WaveEffect
@@ -16,7 +17,6 @@ import mindustry.world.Block
 import mindustry.world.blocks.defense.turrets.PowerTurret
 import mindustry.world.blocks.environment.SteamVent
 import mindustry.world.blocks.liquid.LiquidRouter
-import mindustry.world.blocks.storage.CoreBlock
 import mindustry.world.consumers.ConsumeItems
 import mindustry.world.meta.Attribute
 
@@ -143,7 +143,7 @@ object UntitledBlocks {
             )
         }
 
-        coreShelter = CoreBlock("core-shelter").apply {
+        coreShelter = UntitledCore("core-shelter").apply {
             requirements(Category.effect, ItemStack.with(Items.copper, 300))
             isFirstTier = true
             unitType = UnitTypes.gamma

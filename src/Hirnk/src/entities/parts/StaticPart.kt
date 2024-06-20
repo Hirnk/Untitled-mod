@@ -12,6 +12,7 @@ class StaticPart(val suffix: String = "-static") : DrawPart() {
     var size = 0.7f
     var blending = Blending.additive
     var color = Pal.lancerLaser
+    var baseCharge = 0.2f
 
     var heatProgress = PartProgress.heat
 
@@ -20,7 +21,7 @@ class StaticPart(val suffix: String = "-static") : DrawPart() {
     override fun draw(p: PartParams) {
         Draw.blend(blending)
         Draw.color(color)
-        Draw.alpha(heatProgress.get(p))
+        Draw.alpha(heatProgress.get(p) + baseCharge)
         Draw.rect(region, p.x + Mathf.range(size), p.y + Mathf.range(size), p.rotation - 90f)
         Draw.color()
         Draw.blend()
