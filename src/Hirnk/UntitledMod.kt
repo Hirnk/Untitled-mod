@@ -2,6 +2,7 @@ package Hirnk
 
 import Hirnk.src.content.UntitledBlocks
 import Hirnk.src.content.UntitledFluids
+import Hirnk.src.content.UntitledPlanets
 import Hirnk.src.content.UntitledUnitTypes
 import Hirnk.src.gen.OreItemGen
 import Hirnk.src.ui.UntitledUI
@@ -22,7 +23,7 @@ class UntitledMod : Mod() {
         UntitledFluids.load()
         UntitledBlocks.load()
         UntitledUnitTypes.load()
-        //UntitledPlanets.load() - disabled for testing
+        UntitledPlanets.load()
     }
 
     override fun init() {

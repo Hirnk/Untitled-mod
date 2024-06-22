@@ -5,6 +5,7 @@ import Hirnk.src.world.block.crafter.MultiCrafter
 import Hirnk.src.world.block.crafter.recipe.Recipe
 import Hirnk.src.world.block.crafter.recipe.RecipeProgress
 import Hirnk.src.world.block.storage.UntitledCore
+import Hirnk.src.world.block.transportation.GridNode
 import mindustry.content.*
 import mindustry.entities.effect.MultiEffect
 import mindustry.entities.effect.WaveEffect
@@ -23,6 +24,9 @@ import mindustry.world.meta.Attribute
 object UntitledBlocks {
     //turret
     lateinit var concentrate: Block
+    //transportation
+    lateinit var itemNode: Block
+    lateinit var itemPort: Block
     //fluid
     lateinit var copperTank: Block
     lateinit var copperTankBig: Block
@@ -101,6 +105,20 @@ object UntitledBlocks {
                 }
             }
             limitRange(8f)
+        }
+
+        itemNode = GridNode("item-node").apply {
+            requirements(Category.distribution, ItemStack.with(Items.copper, 45, Items.lead, 20))
+            health = 550
+            armor = 2f
+            size = 2
+        }
+
+        itemPort = GridNode("item-port").apply {
+            requirements(Category.distribution, ItemStack.with(Items.copper, 45, Items.lead, 20))
+            health = 800
+            armor = 2f
+            size = 3
         }
 
         copperTank = LiquidRouter("copper-tank-2").apply {
