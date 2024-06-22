@@ -6,6 +6,7 @@ import Hirnk.src.world.block.crafter.recipe.Recipe
 import Hirnk.src.world.block.crafter.recipe.RecipeProgress
 import Hirnk.src.world.block.storage.UntitledCore
 import Hirnk.src.world.block.transportation.GridNode
+import Hirnk.src.world.block.transportation.GridPort
 import mindustry.content.*
 import mindustry.entities.effect.MultiEffect
 import mindustry.entities.effect.WaveEffect
@@ -107,14 +108,14 @@ object UntitledBlocks {
             limitRange(8f)
         }
 
-        itemNode = GridNode("item-node").apply {
+        itemNode = GridNode("grid-node").apply {
             requirements(Category.distribution, ItemStack.with(Items.copper, 45, Items.lead, 20))
             health = 550
             armor = 2f
             size = 2
         }
 
-        itemPort = GridNode("item-port").apply {
+        itemPort = GridPort("grid-port").apply {
             requirements(Category.distribution, ItemStack.with(Items.copper, 45, Items.lead, 20))
             health = 800
             armor = 2f

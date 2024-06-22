@@ -4,11 +4,14 @@ import arc.struct.IntSeq
 import mindustry.Vars
 import mindustry.gen.Building
 import mindustry.gen.Buildingc
+import plumy.pathkt.IVertex
 
-interface IGridNode : Buildingc {
+interface IGridNode : Buildingc, IVertex<IGridNode> {
     var graph: GridGraph
     var graphInit: Boolean //whether graph has been initialized
     val links: IntSeq
+    override val linkedVertices: Iterable<IGridNode>
+        get() = linked2
 
     fun getConnected(out: MutableList<IGridNode>): MutableList<IGridNode> {
         out.clear()
@@ -62,9 +65,15 @@ interface IGridNode : Buildingc {
 
     companion object {
         private val tempList = ArrayList<IGridNode>()
-        val IGridNode.linkedVertices get() = getConnected(tempList)
+        val IGridNode.linked get() = getConnected(tempList)
 
         private val tempList2 = ArrayList<IGridNode>()
-        val IGridNode.linkedVertices2 get() = getConnected(tempList2)
+        val IGridNode.linked2 get() = getConnected(tempList2)
     }
+}
+
+object EmptyNode : Building(), IGridNode {
+    override var graph = GridGraph()
+    override var graphInit = true
+    override val links = IntSeq()
 }

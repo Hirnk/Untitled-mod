@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id "io.github.liplum.mgpp" version "1.3.0"
+    id "io.github.liplum.mgpp" version "1.3.2"
     id 'org.jetbrains.kotlin.jvm'
 }
 
@@ -27,6 +27,7 @@ dependencies{
     implementation "com.github.plumygames.mktx:core:7a1dc3ff54"
     implementation "com.github.plumygames.mktx:texture:7a1dc3ff54"
     implementation "com.github.plumygames.mktx:dsl:7a1dc3ff54"
+    implementation "com.github.liplum.plumyjava:path-kt:1444fba900"
 }
 mindustry {
     dependency {

@@ -1,30 +1,26 @@
 package Hirnk.src.world.block.transportation
 
-import Hirnk.src.world.block.transportation.IGridNode.Companion.linkedVertices
 import arc.func.Prov
 import arc.graphics.g2d.Lines
-import arc.struct.IntSeq
 import mindustry.gen.Building
 import mindustry.graphics.Drawf
-import mindustry.world.Block
 import plumy.dsl.castBuild
 import plumy.dsl.config
 
-class GridNode(name: String) : Block(name) {
+class GridNode(name: String) : GridBlock(name) {
     var range = 200f
 
     init {
         configurable = true
-        canOverdrive = false
-        drawArrow = false
         saveConfig = true
-        destructible = true
+        drawArrow = false
+        canOverdrive = false
         update = false
 
         buildType = Prov { GridNodeBuild() }
 
-        config<GridNodeBuild, Int> {
-            val target = it.castBuild<GridNodeBuild>() ?: return@config
+        config<GridBuild, Int> {
+            val target = it.castBuild<GridBuild>() ?: return@config
             if (!linkValid(target)) {
                 deselect()
                 return@config
@@ -39,28 +35,15 @@ class GridNode(name: String) : Block(name) {
         }
     }
 
-    fun GridNodeBuild.linkValid(other: IGridNode): Boolean {
+    fun GridBuild.linkValid(other: IGridNode): Boolean {
         return other.dst(this) <= this@GridNode.range
     }
 
-    inner class GridNodeBuild : Building(), IGridNode {
-        override var graph = GridGraph()
-        override var graphInit = false
-        override val links = IntSeq()
-
-        override fun created() {
-            super.created()
-            graph.initNode(this)
-        }
-
-        override fun onProximityRemoved() {
-            super.onProximityRemoved()
-            removeFromGraph()
-        }
-
+    inner class GridNodeBuild : GridBuild() {
         override fun onConfigureBuildTapped(other: Building): Boolean {
             if (other != this) {
                 configure(other.pos())
+                return false
             }
             return true
         }
@@ -73,8 +56,10 @@ class GridNode(name: String) : Block(name) {
         override fun draw() {
             super.draw()
 
+            Lines.stroke(2.5f)
+
             linkedVertices.forEach { other ->
-                Lines.dashLine(x, y, other.x, other.y, 3)
+                Lines.line(x, y, other.x, other.y)
             }
 
             drawPlaceText("${graph.entity.id}", tileX(), tileY(), true)
