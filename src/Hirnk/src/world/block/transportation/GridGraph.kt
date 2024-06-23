@@ -1,6 +1,5 @@
 package Hirnk.src.world.block.transportation
 
-import Hirnk.src.world.block.transportation.IGridNode.Companion.linked2
 import arc.struct.IntSet
 import arc.struct.Queue
 import arc.struct.Seq
@@ -97,7 +96,7 @@ class GridGraph {
             while (queue.size > 0) {
                 val child = queue.removeFirst()
                 newGraph.add(child)
-                for (next in child.linked2) {
+                for (next in child.linkedVertices) {
                     if (next != from && next.graph != newGraph) {
                         newGraph.add(next)
                         queue.addLast(next)
@@ -110,6 +109,7 @@ class GridGraph {
 
     //attempt to fetch the path from cache
     fun getPath(start: IGridNode, destination: IGridNode): Path? {
+        if (start.graph != destination.graph) return null
         val pathKey = createPathKey(start, destination)
         val cached = routeCache[pathKey]
 

@@ -25,6 +25,7 @@ interface IGridNode : Buildingc, IVertex<IGridNode> {
     fun link(other: IGridNode) {
         connectTwoWay(other)
         GridGraph.mergeToLagerNetwork(this, other)
+        graph.onNodeChanged()
     }
 
     fun IGridNode.connectTwoWay(other: IGridNode) {

@@ -31,7 +31,7 @@ class GridPort(name: String) : GridBlock(name) {
 
         fun getPath(): Path? {
             val d = destination ?: return null
-            return if(d.graph == graph) graph.getPath(this, d) else null
+            return graph.getPath(this, d)
         }
 
         override fun onConfigureBuildTapped(other: Building): Boolean {
