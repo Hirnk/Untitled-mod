@@ -31,7 +31,7 @@ open class GridGraphUpdater : Entityc {
 
     override fun serialize() = false
     override fun classId(): Int {
-        throw NotImplementedError("Should be impl by subclass")
+        throw NotImplementedError("Should be implemented by subclass")
     }
 
     override fun id() = id

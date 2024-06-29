@@ -1,5 +1,7 @@
 package Hirnk.src.world.block.transportation
 
+import Hirnk.src.entities.special.GridPacket
+import Hirnk.src.world.block.transportation.IGridNode.Companion.linked2
 import arc.struct.IntSet
 import arc.struct.Queue
 import arc.struct.Seq
@@ -87,12 +89,12 @@ class GridGraph {
     }
 
     fun unlink(from: IGridNode) {
-        for (link in from.linkedVertices) {
-            if (link.graph != this) continue
+        from.linked2.forEach {
+            if (it.graph != this) return@forEach
             val newGraph = GridGraph()
-            newGraph.add(link)
+            newGraph.add(it)
             queue.clear()
-            queue.addLast(link)
+            queue.addLast(it)
             while (queue.size > 0) {
                 val child = queue.removeFirst()
                 newGraph.add(child)
@@ -139,8 +141,9 @@ class GridGraph {
         private val pathBuffer = EasyContainer<IGridNode, Path>(
             ::Pointer,
         ) { pathPool.obtain() }
-        val pathPool: Pool<Path> = Pools.get(Path::class.java, ::Path)
 
+        val pathPool: Pool<Path> = Pools.get(Path::class.java, ::Path)
+        val packetPool: Pool<GridPacket> = Pools.get(GridPacket::class.java, ::GridPacket)
 
         fun mergeToLagerNetwork(a: IGridNode, b: IGridNode) {
             if (a.graph.size >= b.graph.size) {

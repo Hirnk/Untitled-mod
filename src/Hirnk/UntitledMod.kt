@@ -1,9 +1,6 @@
 package Hirnk
 
-import Hirnk.src.content.UntitledBlocks
-import Hirnk.src.content.UntitledFluids
-import Hirnk.src.content.UntitledPlanets
-import Hirnk.src.content.UntitledUnitTypes
+import Hirnk.src.content.*
 import Hirnk.src.gen.OreItemGen
 import Hirnk.src.ui.UntitledUI
 import arc.Events
@@ -21,6 +18,7 @@ class UntitledMod : Mod() {
     override fun loadContent() {
         OreItemGen.load()
         UntitledFluids.load()
+        UntitledPackets.load()
         UntitledBlocks.load()
         UntitledUnitTypes.load()
         UntitledPlanets.load()

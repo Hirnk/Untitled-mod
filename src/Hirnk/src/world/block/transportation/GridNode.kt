@@ -1,6 +1,6 @@
 package Hirnk.src.world.block.transportation
 
-import Hirnk.src.world.block.transportation.IGridNode.Companion.linked
+import Hirnk.src.world.block.transportation.IGridNode.Companion.linked2
 import arc.Core
 import arc.func.Prov
 import arc.graphics.g2d.Draw
@@ -26,6 +26,7 @@ class GridNode(name: String) : GridBlock(name) {
         drawArrow = false
         canOverdrive = false
         update = false
+        clipSize
 
         buildType = Prov { GridNodeBuild() }
 
@@ -52,7 +53,7 @@ class GridNode(name: String) : GridBlock(name) {
     }
 
     fun GridBuild.linkValid(other: IGridNode): Boolean {
-        return links.size <= connections && dst(other) <= this@GridNode.range
+        return links.size < connections && dst(other) <= this@GridNode.range
     }
 
     inner class GridNodeBuild : GridBuild() {
@@ -75,12 +76,12 @@ class GridNode(name: String) : GridBlock(name) {
             Draw.z(Layer.blockOver - 0.01f)
             Lines.stroke(stroke)
 
-            linked.forEach { other ->
+            linked2.forEach { other ->
                 if(other is GridNodeBuild && other.id() >= id) return@forEach //prevent overlapping
-                val a = angleTo(other) - 90f
+                val a = angleTo(other)
 
-                if(a < 0f || a >= 180f) Lines.line(bridgeRegion, x, y, other.x, other.y, false)
-                else Lines.line(bridgeRegion, other.x, other.y, x, y, false)
+                if(a >= 45f && a < 225f) Lines.line(bridgeRegion, other.x, other.y, x, y, false)
+                else Lines.line(bridgeRegion, x, y, other.x, other.y, false)
             }
 
             Draw.z(Layer.blockOver)

@@ -11,7 +11,7 @@ interface IGridNode : Buildingc, IVertex<IGridNode> {
     var graphInit: Boolean //whether graph has been initialized
     val links: IntSeq
     override val linkedVertices: Iterable<IGridNode>
-        get() = linked2
+        get() = linked
 
     fun getConnected(out: MutableList<IGridNode>): MutableList<IGridNode> {
         out.clear()

@@ -1,5 +1,6 @@
 package Hirnk.src.world.block.transportation
 
+import Hirnk.src.content.UntitledPackets
 import arc.func.Prov
 import arc.graphics.Color
 import arc.graphics.g2d.Draw
@@ -10,6 +11,9 @@ import plumy.dsl.castBuild
 import plumy.dsl.config
 
 class GridPort(name: String) : GridBlock(name) {
+    var packet = UntitledPackets.basic
+    var speed = 20f
+
     init {
         configurable = true
         drawArrow = false
@@ -28,10 +32,24 @@ class GridPort(name: String) : GridBlock(name) {
 
     inner class GridPortBuild : GridBuild() {
         var destination: GridPortBuild? = null
+        var reload = 0f
 
         fun getPath(): Path? {
             val d = destination ?: return null
             return graph.getPath(this, d)
+        }
+
+        override fun updateTile() {
+            super.updateTile()
+
+            val p = getPath() ?: return
+
+            if (reload >= 1f) {
+                reload %= 1f
+                packet.create(p, x, y)
+            } else {
+                reload += getProgressIncrease(speed)
+            }
         }
 
         override fun onConfigureBuildTapped(other: Building): Boolean {
@@ -49,7 +67,6 @@ class GridPort(name: String) : GridBlock(name) {
             if (path != null) {
                 Draw.z(Layer.blockOver)
                 Draw.color(Color.red)
-                Lines.stroke(2f)
                 Lines.beginLine()
                 Lines.linePoint(this)
                 path.forEach {
