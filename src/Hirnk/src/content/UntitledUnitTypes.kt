@@ -5,14 +5,18 @@ import Hirnk.src.entities.parts.StaticPart
 import arc.func.Prov
 import mindustry.content.Fx
 import mindustry.content.StatusEffects
+import mindustry.entities.bullet.BulletType
 import mindustry.entities.effect.MultiEffect
 import mindustry.gen.Sounds
 import mindustry.gen.UnitEntity
+import mindustry.graphics.Pal
 import mindustry.type.UnitType
 import mindustry.type.Weapon
+import mindustry.type.weapons.PointDefenseWeapon
 
 object UntitledUnitTypes {
     lateinit var prospector: UnitType
+    lateinit var dredger: UnitType
 
     fun load() {
         prospector = UnitType("prospector").apply {
@@ -64,8 +68,42 @@ object UntitledUnitTypes {
                         status = StatusEffects.shocked
                         length = 155f
                     }
+                },
+                PointDefenseWeapon("untitled-mod-prospector-point-defense").apply {
+                    x = 9f
+                    y = -1f
+                    reload = 8f
+                    targetInterval = 9f
+                    targetSwitchInterval = 12f
+                    recoil = 0.5f
+                    bullet = BulletType().apply {
+                        shootSound = Sounds.lasershoot
+                        shootEffect = Fx.sparkShoot
+                        hitEffect = Fx.pointHit
+                        maxRange = 100f
+                        damage = 20f
+                    }
                 }
             )
+        }
+        dredger = UnitType("dredger").apply {
+            flying = true
+            rotateSpeed = 2.5f
+            drag = 0.02f
+            accel = 0.01f
+            speed = 2.4f
+            health = 1920f
+            armor = 8f
+            hitSize = 30f
+            engineSize = 0f
+            itemCapacity = 180
+            outlineColor = Pal.darkOutline
+
+            setEnginesMirror(
+                UnitType.UnitEngine(16f / 4f, -58f / 4f, 3f, 270f)
+            )
+
+            constructor = Prov { UnitEntity.create() }
         }
     }
 }

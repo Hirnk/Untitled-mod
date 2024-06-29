@@ -4,6 +4,9 @@ import Hirnk.src.entities.bullet.VelHomingType
 import Hirnk.src.world.block.crafter.MultiCrafter
 import Hirnk.src.world.block.crafter.recipe.Recipe
 import Hirnk.src.world.block.crafter.recipe.RecipeProgress
+import Hirnk.src.world.block.storage.UntitledCore
+import Hirnk.src.world.block.transportation.GridNode
+import Hirnk.src.world.block.transportation.GridPort
 import mindustry.content.*
 import mindustry.entities.effect.MultiEffect
 import mindustry.entities.effect.WaveEffect
@@ -16,13 +19,15 @@ import mindustry.world.Block
 import mindustry.world.blocks.defense.turrets.PowerTurret
 import mindustry.world.blocks.environment.SteamVent
 import mindustry.world.blocks.liquid.LiquidRouter
-import mindustry.world.blocks.storage.CoreBlock
 import mindustry.world.consumers.ConsumeItems
 import mindustry.world.meta.Attribute
 
 object UntitledBlocks {
     //turret
     lateinit var concentrate: Block
+    //transportation
+    lateinit var itemNode: Block
+    lateinit var itemPort: Block
     //fluid
     lateinit var copperTank: Block
     lateinit var copperTankBig: Block
@@ -103,6 +108,20 @@ object UntitledBlocks {
             limitRange(8f)
         }
 
+        itemNode = GridNode("grid-node").apply {
+            requirements(Category.distribution, ItemStack.with(Items.copper, 45, Items.lead, 20))
+            health = 550
+            armor = 2f
+            size = 2
+        }
+
+        itemPort = GridPort("grid-port").apply {
+            requirements(Category.distribution, ItemStack.with(Items.copper, 45, Items.lead, 20))
+            health = 800
+            armor = 2f
+            size = 3
+        }
+
         copperTank = LiquidRouter("copper-tank-2").apply {
             requirements(Category.liquid, ItemStack.with(Items.copper, 45, Items.lead, 20))
             health = 550
@@ -143,7 +162,7 @@ object UntitledBlocks {
             )
         }
 
-        coreShelter = CoreBlock("core-shelter").apply {
+        coreShelter = UntitledCore("core-shelter").apply {
             requirements(Category.effect, ItemStack.with(Items.copper, 300))
             isFirstTier = true
             unitType = UnitTypes.gamma
