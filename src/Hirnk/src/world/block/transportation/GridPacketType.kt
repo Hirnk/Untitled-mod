@@ -8,11 +8,13 @@ import arc.util.Time
 import mindustry.ctype.ContentType
 import mindustry.ctype.UnlockableContent
 import mindustry.graphics.Layer
+import mindustry.type.Item
 import plumy.core.assets.TR
 
 class GridPacketType(name: String) : UnlockableContent(name) {
     var speed = 1f
     var layer = Layer.blockOver
+    var size = 2
 
     lateinit var region: TR
 
@@ -30,20 +32,31 @@ class GridPacketType(name: String) : UnlockableContent(name) {
                         Mathf.map(progress, current.x, next.x),
                         Mathf.map(progress, current.y, next.y)
                     )
-                } else remove()
+                } else {
+                    deposit(p)
+                    remove()
+                }
             }
         }
     }
 
     fun draw(p: GridPacket) {
         Draw.rect(region, p.x, p.y)
+        if (p.item.amount != 0) Draw.rect(p.item.item.fullIcon, p.x, p.y)
     }
 
-    fun create(routine: Path, x: Float, y: Float) {
+    //what to do when it reached its destination
+    fun deposit(p: GridPacket) {
+        val destination = p.routine?.last() ?: return
+        destination.items().add(p.item.item, p.item.amount)
+    }
+
+    fun create(routine: Path, x: Float, y: Float, item: Item, amount: Int) {
         val packet = GridPacket.create()
         packet.routine = routine
         packet.type = this
         packet.set(x, y)
+        packet.item.set(item, amount)
         packet.add()
     }
 

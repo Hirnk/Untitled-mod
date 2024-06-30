@@ -120,6 +120,7 @@ object UntitledBlocks {
             health = 800
             armor = 2f
             size = 3
+            itemCapacity = 80
         }
 
         copperTank = LiquidRouter("copper-tank-2").apply {

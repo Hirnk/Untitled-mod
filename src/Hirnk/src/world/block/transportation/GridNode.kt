@@ -32,14 +32,14 @@ class GridNode(name: String) : GridBlock(name) {
 
         config<GridBuild, Int> {
             val target = it.castBuild<GridBuild>() ?: return@config
-            if (!linkValid(target)) {
-                deselect()
-                return@config
-            }
 
             if (links.contains(it)) {
                 disconnectTwoWay(target)
                 reflow(target)
+                return@config
+            }
+            if (!linkValid(target)) {
+                deselect()
                 return@config
             }
             link(target)

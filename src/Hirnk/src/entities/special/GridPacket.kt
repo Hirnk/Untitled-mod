@@ -14,6 +14,7 @@ import mindustry.content.Blocks
 import mindustry.core.World
 import mindustry.entities.EntityGroup
 import mindustry.gen.*
+import mindustry.type.ItemStack
 import mindustry.world.Block
 import mindustry.world.Tile
 import mindustry.world.blocks.environment.Floor
@@ -23,6 +24,7 @@ open class GridPacket : Pool.Poolable, Drawc {
     var routine: Path? = null
     var progress = 0f
     var id: Int = EntityGroup.nextId()
+    var item = ItemStack()
     @JvmField
     var x = -1f
     @JvmField

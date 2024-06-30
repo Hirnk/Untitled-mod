@@ -1,12 +1,13 @@
 package Hirnk.src.world.block.transportation
 
 import Hirnk.src.content.UntitledPackets
+import arc.Core
 import arc.func.Prov
-import arc.graphics.Color
 import arc.graphics.g2d.Draw
-import arc.graphics.g2d.Lines
 import mindustry.gen.Building
 import mindustry.graphics.Layer
+import mindustry.type.Item
+import plumy.core.assets.TR
 import plumy.dsl.castBuild
 import plumy.dsl.config
 
@@ -14,12 +15,16 @@ class GridPort(name: String) : GridBlock(name) {
     var packet = UntitledPackets.basic
     var speed = 20f
 
+    lateinit var topRegion: TR
+
     init {
         configurable = true
         drawArrow = false
         saveConfig = true
         destructible = true
         update = true
+        hasItems = true
+        acceptsItems = true
 
         buildType = Prov { GridPortBuild() }
 
@@ -28,6 +33,11 @@ class GridPort(name: String) : GridBlock(name) {
 
             destination = if (target != this && target != destination && target.graph == graph) target else null
         }
+    }
+
+    override fun load() {
+        super.load()
+        topRegion = Core.atlas.find("$name-top")
     }
 
     inner class GridPortBuild : GridBuild() {
@@ -42,11 +52,17 @@ class GridPort(name: String) : GridBlock(name) {
         override fun updateTile() {
             super.updateTile()
 
+            dump()
+
             val p = getPath() ?: return
+            if (!items.any()) return
 
             if (reload >= 1f) {
                 reload %= 1f
-                packet.create(p, x, y)
+                val i = items.first()
+                val amt = items.get(i).coerceAtMost(packet.size)
+                items.remove(i, amt)
+                packet.create(p, x, y, i, amt)
             } else {
                 reload += getProgressIncrease(speed)
             }
@@ -60,10 +76,15 @@ class GridPort(name: String) : GridBlock(name) {
             return true
         }
 
+        override fun acceptItem(source: Building, item: Item): Boolean {
+            return items.get(item) < getMaximumAccepted(item)
+        }
+
         override fun draw() {
             super.draw()
 
             val path = getPath()
+            /*
             if (path != null) {
                 Draw.z(Layer.blockOver)
                 Draw.color(Color.red)
@@ -74,7 +95,11 @@ class GridPort(name: String) : GridBlock(name) {
                 }
                 Lines.endLine()
                 Draw.z()
+                Draw.color()
             }
+            */
+            Draw.z(Layer.blockOver + 0.01f)
+            Draw.rect(topRegion, x, y)
 
             drawPlaceText("${graph.entity.id}", tileX(), tileY(), true)
         }
