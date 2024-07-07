@@ -1,12 +1,9 @@
 package Hirnk.src.world.block.environment
 
 import arc.Core
-import arc.graphics.Blending
-import arc.graphics.g2d.Draw
 import mindustry.gen.Building
 import mindustry.graphics.Pal
 import mindustry.world.Block
-import mindustry.world.Tile
 import plumy.core.assets.TR
 
 class PulseCrystal(name: String) : Block(name) {
