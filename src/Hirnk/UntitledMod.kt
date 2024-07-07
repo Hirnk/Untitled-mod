@@ -18,6 +18,7 @@ class UntitledMod : Mod() {
     override fun loadContent() {
         OreItemGen.load()
         UntitledFluids.load()
+        UntitledItems.load()
         UntitledPackets.load()
         UntitledBlocks.load()
         UntitledUnitTypes.load()

@@ -5,6 +5,7 @@ import arc.Core
 import arc.graphics.g2d.Draw
 import arc.math.Mathf
 import arc.util.Time
+import mindustry.content.Fx
 import mindustry.ctype.ContentType
 import mindustry.ctype.UnlockableContent
 import mindustry.graphics.Layer
@@ -15,22 +16,30 @@ class GridPacketType(name: String) : UnlockableContent(name) {
     var speed = 1f
     var layer = Layer.blockOver
     var size = 2
+    var derailFx = Fx.blockExplosionSmoke
+    var derailShake = 1f
 
     lateinit var region: TR
 
     fun update(p: GridPacket) {
-        val prog = p.progress.toInt()
         p.run {
             routine?.let {
-                if (prog < it.size - 1) {
-                    val current = it[prog]
-                    val next = it[prog + 1]
-                    val progress = progress % 1f
+                if (node < it.size - 1) {
+
+                    val current = it[node]
+                    val next = it[node + 1]
 
                     p.progress += speed * Time.delta / current.dst(next)
+
+                    if (progress >= 1f) {
+                        onRailUpdate()
+                        p.progress %= 1f
+                        node += 1
+                    }
+
                     set(
-                        Mathf.map(progress, current.x, next.x),
-                        Mathf.map(progress, current.y, next.y)
+                        Mathf.map(p.progress, current.x, next.x),
+                        Mathf.map(p.progress, current.y, next.y)
                     )
                 } else {
                     deposit(p)
@@ -38,6 +47,10 @@ class GridPacketType(name: String) : UnlockableContent(name) {
                 }
             }
         }
+    }
+
+    fun onRailUpdate() {
+
     }
 
     fun draw(p: GridPacket) {

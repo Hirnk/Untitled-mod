@@ -4,6 +4,7 @@ import Hirnk.src.entities.bullet.VelHomingType
 import Hirnk.src.world.block.crafter.MultiCrafter
 import Hirnk.src.world.block.crafter.recipe.Recipe
 import Hirnk.src.world.block.crafter.recipe.RecipeProgress
+import Hirnk.src.world.block.environment.PulseCrystal
 import Hirnk.src.world.block.storage.UntitledCore
 import Hirnk.src.world.block.transportation.GridNode
 import Hirnk.src.world.block.transportation.GridPort
@@ -18,6 +19,7 @@ import mindustry.type.ItemStack
 import mindustry.world.Block
 import mindustry.world.blocks.defense.turrets.PowerTurret
 import mindustry.world.blocks.environment.SteamVent
+import mindustry.world.blocks.environment.TallBlock
 import mindustry.world.blocks.liquid.LiquidRouter
 import mindustry.world.consumers.ConsumeItems
 import mindustry.world.meta.Attribute
@@ -37,6 +39,7 @@ object UntitledBlocks {
     lateinit var coreShelter: Block
     //env
     lateinit var vent: Block
+    lateinit var duitiumCluster: Block
 
     fun load() {
         concentrate = PowerTurret("concentrate").apply {
@@ -183,6 +186,10 @@ object UntitledBlocks {
             parent = Blocks.basalt
             blendGroup = Blocks.basalt
             attributes.set(Attribute.steam, 1f)
+        }
+
+        duitiumCluster = PulseCrystal("duitium-crystal").apply {
+            variants = 2
         }
     }
 }

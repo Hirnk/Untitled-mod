@@ -1,13 +1,15 @@
 package Hirnk.src.entities.special
 
-import Hirnk.src.world.block.transportation.GridGraph
-import Hirnk.src.world.block.transportation.GridPacketType
-import Hirnk.src.world.block.transportation.Path
+import arc.func.Cons
 import arc.graphics.g2d.Draw
+import arc.math.Mathf
 import arc.math.geom.Position
+import arc.math.geom.QuadTree
+import arc.math.geom.Rect
 import arc.util.io.Reads
 import arc.util.io.Writes
 import arc.util.pooling.Pool
+import arc.util.pooling.Pools
 import mindustry.Vars
 import mindustry.content.Blocks
 import mindustry.core.World
@@ -17,35 +19,44 @@ import mindustry.type.ItemStack
 import mindustry.world.Block
 import mindustry.world.Tile
 import mindustry.world.blocks.environment.Floor
+import kotlin.math.min
 
 @Suppress("UNCHECKED_CAST")
-open class GridPacket : Pool.Poolable, Drawc {
-    var routine: Path? = null
-    var progress = 0f
-    var node = 0
-    var id: Int = EntityGroup.nextId()
+open class ItemEntity : Pool.Poolable, Drawc, Hitboxc {
     var item = ItemStack()
+    var id: Int = EntityGroup.nextId()
+    var hitSize = 1f
+
     @JvmField
     var x = -1f
     @JvmField
     var y = -1f
-    lateinit var type: GridPacketType
+    @JvmField
+    var deltaX = 0f
+    @JvmField
+    var deltaY = 0f
+    @JvmField
+    var lastX = -1f
+    @JvmField
+    var lastY = -1f
 
     @Transient @JvmField
     protected var added: Boolean = false
 
     override fun reset() {
-        routine = null
-        progress = 0f
-        node = 0
         id = EntityGroup.nextId()
         x = -1f
         y = -1f
+        deltaX = 0f
+        deltaY = 0f
+        lastX = -1f
+        lastY = -1f
     }
 
     fun free() {
-        GridGraph.packetPool.free(this)
+        itemPool.free(this)
     }
+
 
     override fun <T : Entityc> self(): T = this as T
     override fun <T : Any?> `as`(): T = this as T
@@ -97,14 +108,23 @@ open class GridPacket : Pool.Poolable, Drawc {
     }
 
     override fun update() {
-        type.update(this)
     }
 
     override fun write(p0: Writes) {
     }
 
+    override fun hitbox(rect: Rect) {
+        rect.setCentered(x, y, hitSize, hitSize)
+    }
+
+    override fun hitSize(): Float = hitSize
+    override fun hitSize(size: Float) {
+        hitSize = size
+    }
+
     override fun getX(): Float = x
     override fun getY(): Float = y
+
 
     override fun floorOn(): Floor {
         val tile = this.tileOn()
@@ -153,17 +173,66 @@ open class GridPacket : Pool.Poolable, Drawc {
         this.set(this.x + x, this.y + y)
     }
 
-    override fun clipSize(): Float = 40f
+    override fun collides(other: Hitboxc): Boolean {
+        return hittable()
+    }
+
+    fun hittable(): Boolean = true
+
+    override fun deltaAngle(): Float = Mathf.angle(deltaX, deltaY)
+    override fun deltaLen(): Float = Mathf.len(deltaX, deltaY)
+
+    override fun deltaX(): Float = deltaX
+    override fun deltaX(x: Float) {
+        deltaX = x
+    }
+
+    override fun deltaY(): Float = deltaY
+    override fun deltaY(y: Float) {
+        deltaY = y
+    }
+
+    override fun lastX(): Float = lastX
+    override fun lastX(x: Float) {
+        lastX = x
+    }
+
+    override fun lastY(): Float = lastY
+    override fun lastY(y: Float) {
+        lastY = y
+    }
+
+    override fun collision(other: Hitboxc, x: Float, y: Float) {
+
+    }
+
+    override fun getCollisions(consumer: Cons<QuadTree<QuadTree.QuadTreeObject>>) {
+    }
+
+    override fun hitboxTile(rect: Rect) {
+        val size = min(hitSize * 0.66f, 7.9f)
+        rect.setCentered(this.x, this.y, size, size)
+    }
+
+    override fun updateLastPosition() {
+        this.deltaX = this.x - this.lastX
+        this.deltaY = this.y - this.lastY
+        this.lastX = this.x
+        this.lastY = this.y
+    }
+
+    override fun clipSize(): Float {
+        return 8f
+    }
 
     override fun draw() {
-        Draw.z(type.layer)
-        type.draw(this)
-        Draw.reset()
+        Draw.rect(item.item.fullIcon, x, y)
     }
 
     companion object {
-        fun create(): GridPacket {
-            return GridGraph.packetPool.obtain()
+        fun create() : ItemEntity {
+            return itemPool.obtain()
         }
+        val itemPool: Pool<ItemEntity> = Pools.get(ItemEntity::class.java, ::ItemEntity)
     }
 }
