@@ -1,23 +1,26 @@
 package Hirnk.src.world.block.transportation
 
 import Hirnk.src.entities.special.GridPacket
+import Hirnk.src.world.block.transportation.EmptyNode.isConnected
 import arc.Core
+import arc.flabel.effects.ShakeEffect
 import arc.graphics.g2d.Draw
 import arc.math.Mathf
 import arc.util.Time
 import mindustry.content.Fx
 import mindustry.ctype.ContentType
 import mindustry.ctype.UnlockableContent
+import mindustry.entities.Effect
 import mindustry.graphics.Layer
 import mindustry.type.Item
 import plumy.core.assets.TR
 
 class GridPacketType(name: String) : UnlockableContent(name) {
-    var speed = 1f
+    var speed = 1.5f
     var layer = Layer.blockOver
     var size = 2
-    var derailFx = Fx.blockExplosionSmoke
-    var derailShake = 1f
+    var derailFx = Fx.mineHuge
+    var derailShake = 3f
 
     lateinit var region: TR
 
@@ -32,7 +35,6 @@ class GridPacketType(name: String) : UnlockableContent(name) {
                     p.progress += speed * Time.delta / current.dst(next)
 
                     if (progress >= 1f) {
-                        onRailUpdate()
                         p.progress %= 1f
                         node += 1
                     }
@@ -49,8 +51,13 @@ class GridPacketType(name: String) : UnlockableContent(name) {
         }
     }
 
-    fun onRailUpdate() {
+    fun onRailUpdate(packet: GridPacket) {
+    }
 
+    fun derail(packet: GridPacket) {
+        derailFx.at(packet.x, packet.y)
+        Effect.shake(derailShake, derailShake, packet.x, packet.y)
+        packet.remove()
     }
 
     fun draw(p: GridPacket) {

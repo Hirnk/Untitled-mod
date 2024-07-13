@@ -100,8 +100,6 @@ class GridPort(name: String) : GridBlock(name) {
             */
             Draw.z(Layer.blockOver + 0.01f)
             Draw.rect(topRegion, x, y)
-
-            drawPlaceText("${graph.entity.id}", tileX(), tileY(), true)
         }
     }
 }

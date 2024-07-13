@@ -1,5 +1,7 @@
 package Hirnk.src.world.block.transportation
 
+import Hirnk.src.entities.special.GridPacket
+import arc.struct.IntMap
 import arc.struct.IntSeq
 import mindustry.Vars
 import mindustry.gen.Building
@@ -10,6 +12,7 @@ interface IGridNode : Buildingc, IVertex<IGridNode> {
     var graph: GridGraph
     var graphInit: Boolean //whether graph has been initialized
     val links: IntSeq
+    val packets: IntMap<GridPacket>
     override val linkedVertices: Iterable<IGridNode>
         get() = linked
 
@@ -32,6 +35,8 @@ interface IGridNode : Buildingc, IVertex<IGridNode> {
         other.links.addUnique(pos())
         links.addUnique(other.pos())
     }
+
+    fun IGridNode.isConnected(other: IGridNode) = links.contains(other.pos())
 
     fun IGridNode.unlink(build: Building) {
         if (build is IGridNode) graph.unlink(build)
@@ -77,4 +82,5 @@ object EmptyNode : Building(), IGridNode {
     override var graph = GridGraph()
     override var graphInit = true
     override val links = IntSeq()
+    override val packets = IntMap<GridPacket>()
 }
