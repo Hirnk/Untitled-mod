@@ -2,10 +2,13 @@ package Hirnk.src.content
 
 import arc.graphics.Blending
 import arc.graphics.g2d.Draw
+import arc.graphics.g2d.Fill
 import arc.graphics.g2d.Lines
+import arc.math.Angles
 import arc.math.Mathf
 import mindustry.entities.Effect
 import mindustry.world.Tile
+import plumy.core.assets.TR
 
 object UntitledFx {
     val mineLaserShoot = Effect(20f) { e ->
@@ -30,12 +33,34 @@ object UntitledFx {
                 variantRegions[Mathf.randomSeed(t.pos().toLong(), 0, Math.max(0, variantRegions.size - 1))]
 
             for (i in 0..2) {
-                Draw.rect(r, e.x + Mathf.range(1.5f) * e.fout(), e.y + Mathf.range(1f) * e.fout())
+                Draw.rect(r, e.x + Mathf.range(1.5f) * e.fout(), e.y + Mathf.range(1.5f) * e.fout())
             }
         }
 
         Draw.blend()
         Draw.color()
         Draw.scl()
+    }
+
+    val crystalPulse = Effect(40f) { e ->
+        val texture = e.data<TR>()
+
+        Draw.blend(Blending.additive)
+        Draw.color(e.color)
+        Draw.alpha(0.6f * e.fout())
+        Draw.scl(1.2f)
+        for (i in 0..2) {
+            Draw.rect(texture, e.x + Mathf.range(1.5f) * e.fout(), e.y + Mathf.range(1.5f) * e.fout())
+        }
+        Draw.blend()
+        Draw.color()
+        Draw.scl()
+
+        Draw.color(e.color, e.fin() * 0.4f)
+        Angles.randLenVectors(
+            e.id.toLong(), 9, 4f + e.fin() * 18f
+        ) { x: Float, y: Float ->
+            Fill.square(e.x + Mathf.range(3f) * e.fout() + x, e.y + Mathf.range(3f) * e.fout() + y, e.fout() * 8f + 0.2f, 45f)
+        }
     }
 }
