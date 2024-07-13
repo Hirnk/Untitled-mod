@@ -47,7 +47,7 @@ object UntitledFx {
 
         Draw.blend(Blending.additive)
         Draw.color(e.color)
-        Draw.alpha(0.6f * e.fout())
+        Draw.alpha(0.4f * e.fout())
         Draw.scl(1.2f)
         for (i in 0..2) {
             Draw.rect(texture, e.x + Mathf.range(1.5f) * e.fout(), e.y + Mathf.range(1.5f) * e.fout())
@@ -56,9 +56,9 @@ object UntitledFx {
         Draw.color()
         Draw.scl()
 
-        Draw.color(e.color, e.fin() * 0.4f)
+        Draw.color(e.color, e.fin() * 0.6f)
         Angles.randLenVectors(
-            e.id.toLong(), 9, 4f + e.fin() * 18f
+            e.id.toLong(), 9, 8f + e.fin() * 15f
         ) { x: Float, y: Float ->
             Fill.square(e.x + Mathf.range(3f) * e.fout() + x, e.y + Mathf.range(3f) * e.fout() + y, e.fout() * 8f + 0.2f, 45f)
         }
