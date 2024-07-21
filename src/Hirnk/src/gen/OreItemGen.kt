@@ -1,7 +1,7 @@
 package Hirnk.src.gen
 
 import Hirnk.src.util.graphic.HSVLayerProcessor
-import Hirnk.src.util.steam.Res
+import Hirnk.src.util.res.Res
 import arc.Core
 import arc.graphics.Pixmap
 import arc.graphics.Texture

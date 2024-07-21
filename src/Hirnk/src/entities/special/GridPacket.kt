@@ -2,7 +2,7 @@ package Hirnk.src.entities.special
 
 import Hirnk.src.world.block.transportation.GridGraph
 import Hirnk.src.world.block.transportation.GridPacketType
-import Hirnk.src.world.block.transportation.Path
+import Hirnk.src.world.block.transportation.IGridNode
 import arc.graphics.g2d.Draw
 import arc.math.geom.Position
 import arc.util.io.Reads
@@ -20,9 +20,8 @@ import mindustry.world.blocks.environment.Floor
 
 @Suppress("UNCHECKED_CAST")
 open class GridPacket : Pool.Poolable, Drawc {
-    var routine: Path? = null
+    var routine = ArrayList<IGridNode>()
     var progress = 0f
-    var node = 0
     var id: Int = EntityGroup.nextId()
     var item = ItemStack()
     @JvmField
@@ -35,9 +34,8 @@ open class GridPacket : Pool.Poolable, Drawc {
     protected var added: Boolean = false
 
     override fun reset() {
-        routine = null
+        routine.clear()
         progress = 0f
-        node = 0
         id = EntityGroup.nextId()
         x = -1f
         y = -1f

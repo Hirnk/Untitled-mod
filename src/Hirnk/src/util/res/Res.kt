@@ -1,4 +1,4 @@
-package Hirnk.src.util.steam
+package Hirnk.src.util.res
 
 import java.io.InputStream
 import java.io.Reader

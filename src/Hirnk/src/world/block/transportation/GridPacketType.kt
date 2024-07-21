@@ -3,7 +3,6 @@ package Hirnk.src.world.block.transportation
 import Hirnk.src.entities.special.GridPacket
 import Hirnk.src.world.block.transportation.EmptyNode.isConnected
 import arc.Core
-import arc.flabel.effects.ShakeEffect
 import arc.graphics.g2d.Draw
 import arc.math.Mathf
 import arc.util.Time
@@ -26,32 +25,37 @@ class GridPacketType(name: String) : UnlockableContent(name) {
 
     fun update(p: GridPacket) {
         p.run {
-            routine?.let {
-                if (node < it.size - 1) {
+            routine.let {
+                val current = it[0]
+                val next = it[1]
 
-                    val current = it[node]
-                    val next = it[node + 1]
+                p.progress += speed * Time.delta / current.dst(next)
 
-                    p.progress += speed * Time.delta / current.dst(next)
+                if (progress >= 1f) {
+                    p.progress %= 1f
+                    p.routine.removeFirst()
 
-                    if (progress >= 1f) {
-                        p.progress %= 1f
-                        node += 1
+                    if (routine.size <= 1) {
+                        deposit(p)
+                        remove()
+                        return
                     }
 
-                    set(
-                        Mathf.map(p.progress, current.x, next.x),
-                        Mathf.map(p.progress, current.y, next.y)
-                    )
-                } else {
-                    deposit(p)
-                    remove()
+                    val next1 = it[1]
+                    onRailUpdate(p, current, next, next1)
+
+                    if (!next.isConnected(next1)) return derail(p)
                 }
+
+                set(
+                    Mathf.map(p.progress, current.x, next.x),
+                    Mathf.map(p.progress, current.y, next.y)
+                )
             }
         }
     }
 
-    fun onRailUpdate(packet: GridPacket) {
+    fun onRailUpdate(packet: GridPacket, prev: IGridNode, new: IGridNode, next: IGridNode) {
     }
 
     fun derail(packet: GridPacket) {
@@ -67,13 +71,13 @@ class GridPacketType(name: String) : UnlockableContent(name) {
 
     //what to do when it reached its destination
     fun deposit(p: GridPacket) {
-        val destination = p.routine?.last() ?: return
+        val destination = p.routine.last()
         destination.items().add(p.item.item, p.item.amount)
     }
 
     fun create(routine: Path, x: Float, y: Float, item: Item, amount: Int) {
         val packet = GridPacket.create()
-        packet.routine = routine
+        packet.routine.addAll(routine)
         packet.type = this
         packet.set(x, y)
         packet.item.set(item, amount)
