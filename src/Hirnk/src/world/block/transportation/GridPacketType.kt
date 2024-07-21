@@ -35,16 +35,23 @@ class GridPacketType(name: String) : UnlockableContent(name) {
                     p.progress %= 1f
                     p.routine.removeFirst()
 
+                    if (current is GridNode.GridNodeBuild) {
+                        current.packets.remove(p)
+                    }
+
                     if (routine.size <= 1) {
                         deposit(p)
                         remove()
                         return
                     }
 
-                    val next1 = it[1]
-                    onRailUpdate(p, current, next, next1)
+                    if (next is GridNode.GridNodeBuild) {
+                        next.packets.add(p)
+                    }
 
-                    if (!next.isConnected(next1)) return derail(p)
+                    val next1 = it[1]
+
+                    if (!next.isConnected(next1)) return derail(p, next)
                 }
 
                 set(
@@ -55,10 +62,12 @@ class GridPacketType(name: String) : UnlockableContent(name) {
         }
     }
 
-    fun onRailUpdate(packet: GridPacket, prev: IGridNode, new: IGridNode, next: IGridNode) {
-    }
-
-    fun derail(packet: GridPacket) {
+    fun derail(packet: GridPacket, last: IGridNode) {
+        last.let {
+            if (it is GridNode.GridNodeBuild) {
+                it.packets.remove(packet)
+            } else return@let
+        }
         derailFx.at(packet.x, packet.y)
         Effect.shake(derailShake, derailShake, packet.x, packet.y)
         packet.remove()
@@ -89,4 +98,10 @@ class GridPacketType(name: String) : UnlockableContent(name) {
     }
 
     override fun getContentType(): ContentType = ContentType.bullet
+
+    companion object {
+        fun checkValid(p: GridPacket) {
+            p.routine
+        }
+    }
 }

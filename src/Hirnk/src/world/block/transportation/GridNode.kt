@@ -82,6 +82,10 @@ class GridNode(name: String) : GridBlock(name) {
     inner class GridNodeBuild : GridBuild() {
         val packets = ArrayList<GridPacket>()
 
+        override fun onDisconnect(other: IGridNode) {
+            packets.forEach {  }
+        }
+
         override fun onConfigureBuildTapped(other: Building): Boolean {
             if (other != this) {
                 configure(other.pos())

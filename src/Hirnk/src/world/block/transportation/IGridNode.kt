@@ -42,7 +42,10 @@ interface IGridNode : Buildingc, IVertex<IGridNode> {
     fun IGridNode.disconnectTwoWay(other: IGridNode) {
         other.links.removeValue(pos())
         links.removeValue(other.pos())
+        onDisconnect(other)
     }
+
+    fun onDisconnect(other: IGridNode) {}
 
     fun reflow(other: IGridNode) {
         val new = GridGraph()
