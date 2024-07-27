@@ -42,6 +42,7 @@ interface IGridNode : Buildingc, IVertex<IGridNode> {
     fun IGridNode.disconnectTwoWay(other: IGridNode) {
         other.links.removeValue(pos())
         links.removeValue(other.pos())
+
         onDisconnect(other)
     }
 

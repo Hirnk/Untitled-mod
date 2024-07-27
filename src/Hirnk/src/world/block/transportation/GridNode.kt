@@ -19,7 +19,7 @@ import plumy.dsl.config
 class GridNode(name: String) : GridBlock(name) {
     var range = 200f
     var stroke = 8f
-    var connections = 4
+    var connections = 400
 
     lateinit var bridgeRegion: TR
     lateinit var bridgeOutlineRegion: TR
@@ -80,10 +80,11 @@ class GridNode(name: String) : GridBlock(name) {
     }
 
     inner class GridNodeBuild : GridBuild() {
-        val packets = ArrayList<GridPacket>()
+        var packets = ArrayList<GridPacket>()
 
         override fun onDisconnect(other: IGridNode) {
-            packets.forEach {  }
+            packets.forEach { it.type.checkValid(it) }
+            if (other is GridNodeBuild) other.packets.forEach { it.type.checkValid(it) }
         }
 
         override fun onConfigureBuildTapped(other: Building): Boolean {
@@ -114,12 +115,12 @@ class GridNode(name: String) : GridBlock(name) {
             linked2.forEach { other ->
                 if(other is GridNodeBuild && other.id() >= id) return@forEach //prevent overlapping
                 val a = angleTo(other)
-
-                if(a < 45f || a >= 225f) Draw.yscl = -1f
-
                 Draw.z(Layer.blockOver - 0.01f)
-                Lines.line(bridgeRegion, other.x, other.y, x, y, false)
+
+                if(a < 45f || a >= 225f) Lines.line(bridgeRegion, x, y, other.x, other.y,false)
+                else Lines.line(bridgeRegion, other.x, other.y, x, y, false)
             }
+
             Draw.yscl = 1f
 
             Draw.z(Layer.blockOver)

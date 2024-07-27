@@ -63,10 +63,8 @@ class GridPacketType(name: String) : UnlockableContent(name) {
     }
 
     fun derail(packet: GridPacket, last: IGridNode) {
-        last.let {
-            if (it is GridNode.GridNodeBuild) {
-                it.packets.remove(packet)
-            } else return@let
+        if (last is GridNode.GridNodeBuild) {
+            last.packets.retainAll{ isValid(it)}
         }
         derailFx.at(packet.x, packet.y)
         Effect.shake(derailShake, derailShake, packet.x, packet.y)
@@ -93,15 +91,15 @@ class GridPacketType(name: String) : UnlockableContent(name) {
         packet.add()
     }
 
+    fun checkValid(p: GridPacket) {
+        val current = p.routine[0]
+        val next = p.routine[1]
+        if (!current.isConnected(next)) p.type.derail(p, current)
+    }
+
     override fun load() {
         region = Core.atlas.find(name)
     }
 
     override fun getContentType(): ContentType = ContentType.bullet
-
-    companion object {
-        fun checkValid(p: GridPacket) {
-            p.routine
-        }
-    }
 }
