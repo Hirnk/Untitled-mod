@@ -82,7 +82,7 @@ class GridPort(name: String) : GridBlock(name) {
 
         override fun draw() {
             super.draw()
-            Draw.z(Layer.blockOver + 0.01f)
+            Draw.z(Layer.blockOver + 0.02f)
             Draw.rect(topRegion, x, y)
         }
     }

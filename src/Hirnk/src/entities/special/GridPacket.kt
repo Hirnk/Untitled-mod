@@ -2,7 +2,6 @@ package Hirnk.src.entities.special
 
 import Hirnk.src.world.block.transportation.GridGraph
 import Hirnk.src.world.block.transportation.IGridNode
-import arc.graphics.g2d.Draw
 import arc.math.geom.Position
 import arc.util.io.Reads
 import arc.util.io.Writes
@@ -153,9 +152,7 @@ open class GridPacket : Pool.Poolable, Drawc {
     override fun clipSize(): Float = 40f
 
     override fun draw() {
-        Draw.z(type.layer)
         type.draw(this)
-        Draw.reset()
     }
 
     companion object {

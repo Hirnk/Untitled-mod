@@ -19,7 +19,7 @@ import plumy.core.assets.TR
 
 class GridPacketType(name: String) : UnlockableContent(name) {
     var speed = 1.5f
-    var layer = Layer.blockOver
+    var layer = Layer.blockOver + 0.02f
     var size = 2
     var derailFx = Fx.mineHuge
     var derailSFx = Sounds.boom
@@ -27,6 +27,7 @@ class GridPacketType(name: String) : UnlockableContent(name) {
     var itemType = UntitledMisc.basicItem
 
     lateinit var region: TR
+    lateinit var outlineRegion: TR
 
     fun update(p: GridPacket) {
         p.run {
@@ -78,10 +79,11 @@ class GridPacketType(name: String) : UnlockableContent(name) {
     }
 
     fun draw(p: GridPacket) {
+        Draw.z(Layer.blockOver - 0.02f)
+        Draw.rect(outlineRegion, p.x, p.y)
+        Draw.z(layer)
         Draw.rect(region, p.x, p.y)
-        if (p.item.amount != 0) {
-            Draw.rect(p.item.item.fullIcon, p.x, p.y)
-        }
+        Draw.rect(p.item.item.fullIcon, p.x, p.y)
     }
 
     //what to do when it reached its destination
@@ -112,6 +114,7 @@ class GridPacketType(name: String) : UnlockableContent(name) {
 
     override fun load() {
         region = Core.atlas.find(name)
+        outlineRegion = Core.atlas.find("$name-outline")
     }
 
     override fun getContentType(): ContentType = ContentType.bullet
