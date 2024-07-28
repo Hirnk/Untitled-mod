@@ -70,7 +70,7 @@ class GridPacketType(name: String) : UnlockableContent(name) {
     }
 
     fun derail(packet: GridPacket) {
-        itemType.create(packet.x, packet.y, packet.item.item,packet.item.amount, Mathf.random(360f))
+        itemType.create(packet.x, packet.y, packet.item.item, packet.item.amount, Mathf.random(360f))
 
         derailFx.at(packet.x, packet.y)
         derailSFx.at(packet.x, packet.y)

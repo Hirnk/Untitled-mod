@@ -1,10 +1,12 @@
 package Hirnk.src.entities.bullet
 
 import Hirnk.src.content.UntitledFx
+import Hirnk.src.content.UntitledMisc
 import arc.Core
 import arc.graphics.Color
 import arc.graphics.g2d.Draw
 import arc.math.Interp
+import arc.math.Mathf
 import arc.util.Tmp
 import mindustry.Vars
 import mindustry.Vars.tilesize
@@ -25,6 +27,7 @@ class PointMinerBulletType : BulletType() {
     var mineAmt = 3
     var mineEffect = UntitledFx.mineOre
     var length = 100f
+    var itemType = UntitledMisc.basicItem
 
     lateinit var laser: TR
     lateinit var laserEnd: TR
@@ -61,7 +64,10 @@ class PointMinerBulletType : BulletType() {
         if (t != null) {
             val d = t.overlay().itemDrop
             if (d != null) {
-                mineEffect.at(t.x * tilesize.toFloat(), t.y * tilesize.toFloat(), b.rotation(), color, t)
+                val tx = t.x * tilesize.toFloat()
+                val ty = t.y * tilesize.toFloat()
+                mineEffect.at(tx, ty, b.rotation(), color, t)
+                itemType.create(tx, ty, d, mineAmt, Mathf.random(360f))
             }
         }
     }
