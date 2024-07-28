@@ -1,7 +1,9 @@
-package Hirnk.src.world.block.transportation
+package Hirnk.src.entities.special
 
-import Hirnk.src.entities.special.GridPacket
+import Hirnk.src.content.UntitledMisc
 import Hirnk.src.world.block.transportation.EmptyNode.isConnected
+import Hirnk.src.world.block.transportation.GridNode
+import Hirnk.src.world.block.transportation.Path
 import arc.Core
 import arc.graphics.g2d.Draw
 import arc.math.Mathf
@@ -10,6 +12,7 @@ import mindustry.content.Fx
 import mindustry.ctype.ContentType
 import mindustry.ctype.UnlockableContent
 import mindustry.entities.Effect
+import mindustry.gen.Sounds
 import mindustry.graphics.Layer
 import mindustry.type.Item
 import plumy.core.assets.TR
@@ -19,7 +22,9 @@ class GridPacketType(name: String) : UnlockableContent(name) {
     var layer = Layer.blockOver
     var size = 2
     var derailFx = Fx.mineHuge
-    var derailShake = 3f
+    var derailSFx = Sounds.boom
+    var derailShake = 3.5f
+    var itemType = UntitledMisc.basicItem
 
     lateinit var region: TR
 
@@ -44,14 +49,15 @@ class GridPacketType(name: String) : UnlockableContent(name) {
                         remove()
                         return
                     }
-
-                    if (next is GridNode.GridNodeBuild) {
-                        next.packets.add(p)
-                    }
-
                     val next1 = it[1]
 
-                    if (!next.isConnected(next1)) return derail(p, next)
+
+                    if (next is GridNode.GridNodeBuild && next.isConnected(next1)) {
+                        next.packets.add(p)
+                    } else {
+                        derail(p)
+                        return
+                    }
                 }
 
                 set(
@@ -62,18 +68,20 @@ class GridPacketType(name: String) : UnlockableContent(name) {
         }
     }
 
-    fun derail(packet: GridPacket, last: IGridNode) {
-        if (last is GridNode.GridNodeBuild) {
-            last.packets.retainAll{ isValid(it)}
-        }
+    fun derail(packet: GridPacket) {
+        itemType.create(packet.x, packet.y, packet.item.item,packet.item.amount, Mathf.random(360f))
+
         derailFx.at(packet.x, packet.y)
+        derailSFx.at(packet.x, packet.y)
         Effect.shake(derailShake, derailShake, packet.x, packet.y)
         packet.remove()
     }
 
     fun draw(p: GridPacket) {
         Draw.rect(region, p.x, p.y)
-        if (p.item.amount != 0) Draw.rect(p.item.item.fullIcon, p.x, p.y)
+        if (p.item.amount != 0) {
+            Draw.rect(p.item.item.fullIcon, p.x, p.y)
+        }
     }
 
     //what to do when it reached its destination
@@ -91,10 +99,15 @@ class GridPacketType(name: String) : UnlockableContent(name) {
         packet.add()
     }
 
-    fun checkValid(p: GridPacket) {
+    fun checkValid(p: GridPacket): Boolean {
+        if (p.routine.size <= 1) return true
+
         val current = p.routine[0]
         val next = p.routine[1]
-        if (!current.isConnected(next)) p.type.derail(p, current)
+        if (!current.isConnected(next)) {
+            p.type.derail(p)
+            return false
+        } else return true
     }
 
     override fun load() {

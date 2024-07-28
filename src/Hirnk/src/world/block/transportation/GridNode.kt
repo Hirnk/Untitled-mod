@@ -83,8 +83,8 @@ class GridNode(name: String) : GridBlock(name) {
         var packets = ArrayList<GridPacket>()
 
         override fun onDisconnect(other: IGridNode) {
-            packets.forEach { it.type.checkValid(it) }
-            if (other is GridNodeBuild) other.packets.forEach { it.type.checkValid(it) }
+            packets.retainAll { it.type.checkValid(it) }
+            if (other is GridNodeBuild) other.packets.retainAll { it.type.checkValid(it) }
         }
 
         override fun onConfigureBuildTapped(other: Building): Boolean {

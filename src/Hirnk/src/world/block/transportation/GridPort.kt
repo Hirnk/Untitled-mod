@@ -1,6 +1,6 @@
 package Hirnk.src.world.block.transportation
 
-import Hirnk.src.content.UntitledPackets
+import Hirnk.src.content.UntitledMisc
 import arc.Core
 import arc.func.Prov
 import arc.graphics.g2d.Draw
@@ -12,7 +12,7 @@ import plumy.dsl.castBuild
 import plumy.dsl.config
 
 class GridPort(name: String) : GridBlock(name) {
-    var packet = UntitledPackets.basic
+    var packet = UntitledMisc.basicPacket
     var speed = 20f
 
     lateinit var topRegion: TR
@@ -82,22 +82,6 @@ class GridPort(name: String) : GridBlock(name) {
 
         override fun draw() {
             super.draw()
-
-            val path = getPath()
-            /*
-            if (path != null) {
-                Draw.z(Layer.blockOver)
-                Draw.color(Color.red)
-                Lines.beginLine()
-                Lines.linePoint(this)
-                path.forEach {
-                    Lines.linePoint(it)
-                }
-                Lines.endLine()
-                Draw.z()
-                Draw.color()
-            }
-            */
             Draw.z(Layer.blockOver + 0.01f)
             Draw.rect(topRegion, x, y)
         }

@@ -1,7 +1,6 @@
 package Hirnk.src.entities.special
 
 import Hirnk.src.world.block.transportation.GridGraph
-import Hirnk.src.world.block.transportation.GridPacketType
 import Hirnk.src.world.block.transportation.IGridNode
 import arc.graphics.g2d.Draw
 import arc.math.geom.Position

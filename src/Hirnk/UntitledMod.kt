@@ -19,7 +19,7 @@ class UntitledMod : Mod() {
         OreItemGen.load()
         UntitledFluids.load()
         UntitledItems.load()
-        UntitledPackets.load()
+        UntitledMisc.load()
         UntitledBlocks.load()
         UntitledUnitTypes.load()
         UntitledPlanets.load()
