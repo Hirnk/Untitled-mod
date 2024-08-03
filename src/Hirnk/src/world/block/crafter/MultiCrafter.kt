@@ -11,6 +11,8 @@ import mindustry.gen.Sounds
 import mindustry.gen.Tex
 import mindustry.ui.Styles
 import mindustry.world.Block
+import mindustry.world.draw.DrawBlock
+import mindustry.world.draw.DrawDefault
 import mindustry.world.meta.BlockFlag
 import plumy.core.math.approachDelta
 import plumy.dsl.config
@@ -18,6 +20,7 @@ import plumy.dsl.config
 class MultiCrafter(name: String) : Block(name) {
     val recipes = ArrayList<Recipe>()
     var warmupSpeed = 0.1f
+    var drawer: DrawBlock = DrawDefault()
 
     init {
         update = true
@@ -87,6 +90,10 @@ class MultiCrafter(name: String) : Block(name) {
                     }
                 }
             }
+        }
+
+        override fun draw() {
+            drawer.draw(this)
         }
     }
 }

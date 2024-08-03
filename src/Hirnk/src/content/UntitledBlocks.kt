@@ -8,6 +8,7 @@ import Hirnk.src.world.block.environment.PulseCrystal
 import Hirnk.src.world.block.storage.UntitledCore
 import Hirnk.src.world.block.transportation.GridNode
 import Hirnk.src.world.block.transportation.GridPort
+import Hirnk.src.world.draw.DrawPane
 import mindustry.content.*
 import mindustry.entities.effect.MultiEffect
 import mindustry.entities.effect.WaveEffect
@@ -19,7 +20,6 @@ import mindustry.type.ItemStack
 import mindustry.world.Block
 import mindustry.world.blocks.defense.turrets.PowerTurret
 import mindustry.world.blocks.environment.SteamVent
-import mindustry.world.blocks.environment.TallBlock
 import mindustry.world.blocks.liquid.LiquidRouter
 import mindustry.world.consumers.ConsumeItems
 import mindustry.world.meta.Attribute
@@ -34,7 +34,7 @@ object UntitledBlocks {
     lateinit var copperTank: Block
     lateinit var copperTankBig: Block
     //crafter
-    lateinit var furnace: Block
+    lateinit var centrifuge: Block
     //core
     lateinit var coreShelter: Block
     //env
@@ -146,7 +146,7 @@ object UntitledBlocks {
             liquidPadding = 8f
         }
 
-        furnace = MultiCrafter("furnace").apply {
+        centrifuge = MultiCrafter("centrifuge").apply {
             requirements(Category.crafting, ItemStack.with(Items.copper, 80, Items.lead, 20))
             health = 750
             size = 3
@@ -164,6 +164,7 @@ object UntitledBlocks {
                     }
                 }
             )
+            drawer = DrawPane()
         }
 
         coreShelter = UntitledCore("core-shelter").apply {
