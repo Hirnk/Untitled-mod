@@ -22,7 +22,7 @@ class RecipeProgress() {
     val outputItems = ArrayList<ItemStack>()
     val outputFluids = ArrayList<LiquidStack>()
     var craftTime = 60f
-    var craftEffect = Fx.smeltsmoke
+    var craftEffect = Fx.none
 }
 
 open class RecipeHandler(

@@ -22,7 +22,10 @@ import mindustry.world.blocks.defense.turrets.PowerTurret
 import mindustry.world.blocks.environment.SteamVent
 import mindustry.world.blocks.liquid.LiquidRouter
 import mindustry.world.consumers.ConsumeItems
+import mindustry.world.draw.DrawDefault
+import mindustry.world.draw.DrawRegion
 import mindustry.world.meta.Attribute
+import plumy.dsl.DrawMulti
 
 object UntitledBlocks {
     //turret
@@ -150,21 +153,20 @@ object UntitledBlocks {
             requirements(Category.crafting, ItemStack.with(Items.copper, 80, Items.lead, 20))
             health = 750
             size = 3
+            warmupSpeed = 0.002f
             recipes.add(
                 Recipe().apply {
                     progresses += RecipeProgress().apply {
                         consumers.add(ConsumeItems(ItemStack.with(Items.copper, 1)))
-                        outputItems.add(ItemStack(Items.tungsten, 2))
-                    }
-                    progresses += RecipeProgress().apply {
-                        consumers.add(ConsumeItems(ItemStack.with(Items.coal, 1)))
-                        outputItems.add(ItemStack(Items.graphite, 3))
-                        craftTime = 80f
-                        craftEffect = Fx.smokePuff
+                        outputItems.add(ItemStack(UntitledItems.recycledScrap, 2))
                     }
                 }
             )
-            drawer = DrawPane()
+            drawer = DrawMulti {
+                +DrawRegion("-bottom")
+                +DrawPane()
+                +DrawDefault()
+            }
         }
 
         coreShelter = UntitledCore("core-shelter").apply {

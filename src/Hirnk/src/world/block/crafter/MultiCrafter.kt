@@ -6,6 +6,7 @@ import arc.Core
 import arc.func.Prov
 import arc.scene.ui.layout.Table
 import arc.struct.EnumSet
+import arc.util.Time
 import mindustry.gen.Building
 import mindustry.gen.Sounds
 import mindustry.gen.Tex
@@ -50,9 +51,15 @@ class MultiCrafter(name: String) : Block(name) {
         recipes.forEach { it.bars(this) }
     }
 
+    override fun load() {
+        super.load()
+        drawer.load(this)
+    }
+
     inner class MultiCrafterBuild : Building() {
         val handlers = Array(recipes.size) { RecipeHandler(recipes[it], this) }
         var warmup = 0f
+        var totalProgress = 0f
         var currentRecipe = -1 //selected recipe, -1 for no recipe selected
 
         fun active() = currentRecipe != -1
@@ -66,6 +73,7 @@ class MultiCrafter(name: String) : Block(name) {
             efficiency(handlers[currentRecipe].efficiency())
             handlers[currentRecipe].update()
             warmup = warmup.approachDelta(efficiency().coerceAtMost(1f), warmupSpeed)
+            totalProgress += warmup * Time.delta
         }
 
         override fun efficiencyScale(): Float {
@@ -73,6 +81,7 @@ class MultiCrafter(name: String) : Block(name) {
         }
 
         override fun warmup(): Float = warmup
+        override fun totalProgress(): Float = totalProgress
 
         override fun config() = currentRecipe
 
