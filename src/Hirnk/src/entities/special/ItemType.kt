@@ -1,22 +1,24 @@
 package Hirnk.src.entities.special
 
 import arc.graphics.g2d.Draw
+import arc.math.Interp
 import mindustry.graphics.Layer
 import mindustry.type.Item
 
 class ItemType {
-    var drag = 0.3f
-    var lifetime = 240f
+    var drag = 0.2f
+    var lifetime = 360f
     var phasingTime = 30f
     var speed = 4f
     var layer = Layer.blockOver + 0.01f
+    var interp = Interp.pow10In
 
     fun update(i: ItemEntity) {
     }
 
     fun draw(i: ItemEntity) {
         Draw.z(layer)
-        Draw.scl(i.foutpow())
+        Draw.scl(i.fout(interp))
         Draw.rect(i.item.item.fullIcon, i.x, i.y)
         Draw.scl()
     }

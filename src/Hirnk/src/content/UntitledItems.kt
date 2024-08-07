@@ -7,6 +7,7 @@ object UntitledItems {
     lateinit var duitium: Item
     lateinit var fluxoglass: Item
     lateinit var recycledScrap: Item
+    lateinit var denseAlloy: Item
 
     fun load() {
         duitium = Item("duitium", Color.valueOf("a8dcdc")).apply {
@@ -17,6 +18,12 @@ object UntitledItems {
         }
         recycledScrap = Item("recycled-scrap", Color.valueOf("9a9fb4")).apply {
             cost = 0.2f
+        }
+        denseAlloy = Item("dense-alloy", Color.valueOf("6f6281")).apply {
+            charge = 0.1f
+        }
+        denseAlloy = Item("itenium", Color.valueOf("8682cc")).apply {
+            radioactivity = 3.2f
         }
     }
 }

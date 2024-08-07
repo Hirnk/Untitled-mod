@@ -1,6 +1,8 @@
 package Hirnk.src.world.block.environment
 
 import Hirnk.src.content.UntitledFx
+import Hirnk.src.content.UntitledItems
+import Hirnk.src.entities.special.ItemType
 import arc.Core
 import arc.graphics.Blending
 import arc.graphics.g2d.Draw
@@ -19,8 +21,12 @@ class PulseCrystal(name: String) : Block(name) {
     var shadowOffset = -2.2f
     var shadowAlpha: Float = 0.4f
     var staticSize = 2.5f
-    var outputRate = 120f
+    var outputRate = 160f
     var pulseFx = UntitledFx.crystalPulse
+    var item = UntitledItems.duitium
+    var amount = 3
+
+    var itemType = ItemType()
 
     init {
         solid = true
@@ -53,6 +59,9 @@ class PulseCrystal(name: String) : Block(name) {
                         Mathf.randomSeed(tile.pos().toLong(), 0, variantShadowRegions.size - 1)
                     ]
                 )
+                for (i in 0 until amount) {
+                    itemType.create(x, y, item, 1, Mathf.random(360f))
+                }
             }
         }
 

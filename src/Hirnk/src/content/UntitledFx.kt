@@ -56,11 +56,11 @@ object UntitledFx {
         Draw.color()
         Draw.scl()
 
-        Draw.color(e.color, e.fin() * 0.6f)
+        Draw.color(e.color, e.fin() * 0.2f)
         Angles.randLenVectors(
-            e.id.toLong(), 9, 8f + e.fin() * 15f
+            e.id.toLong(), 5, 8f + e.fin() * 15f
         ) { x: Float, y: Float ->
-            Fill.square(e.x + Mathf.range(3f) * e.fout() + x, e.y + Mathf.range(3f) * e.fout() + y, e.fout() * 8f + 0.2f, 45f)
+            Fill.square(e.x + Mathf.range(3f) * e.fout() + x, e.y + Mathf.range(3f) * e.fout() + y, e.fout() * 6f + 0.2f, 45f)
         }
     }
 }
