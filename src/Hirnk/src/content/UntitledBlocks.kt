@@ -6,8 +6,10 @@ import Hirnk.src.world.block.crafter.recipe.Recipe
 import Hirnk.src.world.block.crafter.recipe.RecipeProgress
 import Hirnk.src.world.block.environment.PulseCrystal
 import Hirnk.src.world.block.storage.UntitledCore
-import Hirnk.src.world.block.transportation.GridNode
-import Hirnk.src.world.block.transportation.GridPort
+import Hirnk.src.world.block.transportation.grid.GridNode
+import Hirnk.src.world.block.transportation.grid.GridPort
+import Hirnk.src.world.block.transportation.mecharm.Arm
+import Hirnk.src.world.block.transportation.mecharm.MechanicalArm
 import Hirnk.src.world.draw.DrawPane
 import mindustry.content.*
 import mindustry.entities.effect.MultiEffect
@@ -31,6 +33,7 @@ object UntitledBlocks {
     //turret
     lateinit var concentrate: Block
     //transportation
+    lateinit var transporter: Block
     lateinit var itemNode: Block
     lateinit var itemPort: Block
     //fluid
@@ -112,6 +115,18 @@ object UntitledBlocks {
                 }
             }
             limitRange(8f)
+        }
+
+        transporter = MechanicalArm("transporter").apply {
+            requirements(Category.distribution, ItemStack.with(Items.copper, 45, Items.lead, 20))
+            health = 240
+            armor = 5.5f
+            size = 1
+
+            arm = Arm().apply {
+                joints = 2
+                offset = arrayOf(0f, 20f, 40f, 60f)
+            }
         }
 
         itemNode = GridNode("grid-node").apply {

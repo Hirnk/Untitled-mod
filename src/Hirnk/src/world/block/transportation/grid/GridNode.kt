@@ -1,8 +1,8 @@
-package Hirnk.src.world.block.transportation
+package Hirnk.src.world.block.transportation.grid
 
 import Hirnk.src.entities.special.GridPacket
 import Hirnk.src.util.graphic.UntitledPal
-import Hirnk.src.world.block.transportation.IGridNode.Companion.linked2
+import Hirnk.src.world.block.transportation.grid.IGridNode.Companion.linked2
 import arc.Core
 import arc.func.Prov
 import arc.graphics.Color

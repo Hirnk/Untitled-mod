@@ -1,4 +1,4 @@
-package Hirnk.src.world.block.transportation
+package Hirnk.src.world.block.transportation.grid
 
 import arc.util.io.Reads
 import arc.util.io.Writes

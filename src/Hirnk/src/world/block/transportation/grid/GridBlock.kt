@@ -1,4 +1,4 @@
-package Hirnk.src.world.block.transportation
+package Hirnk.src.world.block.transportation.grid
 
 import arc.func.Prov
 import arc.struct.IntSeq
