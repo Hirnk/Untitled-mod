@@ -124,6 +124,7 @@ open class ItemEntity : Pool.Poolable, Drawc, Hitboxc, Velc, Timedc {
     override fun remove() {
         if (added) {
             Groups.all.remove(this)
+            Groups.draw.remove(this)
             free()
             added = false
         }

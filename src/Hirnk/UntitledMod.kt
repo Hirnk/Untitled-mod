@@ -22,7 +22,7 @@ class UntitledMod : Mod() {
         UntitledMisc.load()
         UntitledBlocks.load()
         UntitledUnitTypes.load()
-        UntitledPlanets.load()
+        //UntitledPlanets.load()
     }
 
     override fun init() {

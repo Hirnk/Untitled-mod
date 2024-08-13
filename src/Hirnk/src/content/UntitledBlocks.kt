@@ -41,6 +41,7 @@ object UntitledBlocks {
     lateinit var copperTankBig: Block
     //crafter
     lateinit var centrifuge: Block
+    lateinit var refinery: Block
     //core
     lateinit var coreShelter: Block
     //env
@@ -182,6 +183,14 @@ object UntitledBlocks {
                 +DrawPane()
                 +DrawDefault()
             }
+        }
+
+        refinery = MultiCrafter("refinery").apply {
+            requirements(Category.liquid, ItemStack.with(Items.copper, 45*4, Items.lead, 20*4))
+            health = 3200
+            armor = 6f
+            size = 4
+            squareSprite = false
         }
 
         coreShelter = UntitledCore("core-shelter").apply {

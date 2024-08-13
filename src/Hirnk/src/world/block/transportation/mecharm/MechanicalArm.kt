@@ -5,6 +5,7 @@ import arc.func.Prov
 import arc.graphics.g2d.Draw
 import arc.graphics.g2d.Lines
 import arc.math.geom.Vec2
+import arc.util.Time
 import arc.util.Tmp
 import mindustry.Vars
 import mindustry.gen.Building
@@ -18,7 +19,7 @@ import plumy.dsl.config
 
 class MechanicalArm(name: String) : Block(name) {
     var payloadAmount = 8
-    var payloadTime = 60f
+    var payloadTime = 20f
     var arm: Arm = EmptyArm
 
     fun range(): Float {
@@ -50,19 +51,70 @@ class MechanicalArm(name: String) : Block(name) {
     fun MechanicalArmBuild.validConnect(other: Building)
         = dst(other) <= range()
 
-    enum class ArmState {
-        INPUT, OUTPUT, IDLE
-    }
+    enum class ArmState { INPUT, OUTPUT, IDLE }
+    enum class Indexing { INPUT, OUTPUT }
 
     inner class MechanicalArmBuild : Building() {
         var inputMode = true
         var progress = 0f
+        var state = ArmState.IDLE
+        var index = 0
+
+        val mover by lazy { Pair(
+            Array(arm.joints + 2) { Vec2(arm.offset[it] + x, y) },
+            FloatArray(arm.joints + 1) { 0f }
+        )}
 
         var inputs = ArrayList<Building>()
         var outputs = ArrayList<Building>()
         var positions = HashMap<Int, Pair<Array<Vec2>, FloatArray>>()
 
-        var angleMultipier = FloatArray(arm.joints + 1) { 0f }
+        var offsetSpeed = FloatArray(arm.joints + 1) { 0f }
+
+        override fun updateTile() {
+            progress += getProgressIncrease(payloadTime)
+
+            when (state) {
+                ArmState.INPUT -> {
+                    if (progress < 1f) {
+                        for (i in 0 until arm.joints + 1) {
+                            val vert = mover.first
+                            val a = mover.second
+                            val s = offsetSpeed[i] * Time.delta
+
+                            for (j in i until arm.joints + 1) {
+                                a[j] += s
+                                vert[j + 1].set(Tmp.v1.trns(a[j], arm.offset[j + 1] - arm.offset[j]).add(vert[i]))
+                            }
+                        }
+                    } else {
+                        setOffset(inputs[0])
+                        state = ArmState.IDLE
+                    }
+                }
+                ArmState.OUTPUT -> {
+                    if (progress < 1f) {
+
+                    } else state = ArmState.IDLE
+                }
+                ArmState.IDLE -> {
+                    if (inputs.size >= 1) {
+                        state = ArmState.INPUT
+                    }
+                }
+            }
+
+            progress %= 1
+        }
+
+        fun setOffset(other: Building) {
+            var s = 0f
+            for (i in offsetSpeed.indices) {
+                val speed = (positions[other.pos()]!!.second[i] - mover.second[i]) / payloadTime - s
+                s += speed
+                offsetSpeed[i] = speed
+            }
+        }
 
         fun registerPoint(input: Boolean, building: Building) {
             if (input) inputs.add(building) else outputs.add(building)
@@ -76,9 +128,10 @@ class MechanicalArm(name: String) : Block(name) {
 
             pos.solve(Tmp.v1.set(building))
 
+            Tmp.v2.set(1f, 0f)
+
             val angles = FloatArray(arm.joints + 1) { i ->
-                Tmp.v1.set(pos[i]).sub(this)
-                    .angle(Tmp.v2.set(pos[i + 1]).sub(this))
+                Tmp.v1.set(pos[i + 1]).sub(pos[i]).angle()
             }
 
             positions[building.pos()] = Pair(pos, angles)
@@ -114,9 +167,17 @@ class MechanicalArm(name: String) : Block(name) {
             Lines.stroke(2f)
             Draw.color(Pal.lancerLaser)
 
+            Lines.beginLine()
+            mover.first.forEach {
+                Lines.linePoint(it)
+            }
+            Lines.endLine()
+
+            Draw.color(Pal.slagOrange)
+
             if (positions.size == 0) return
 
-            positions.forEach { k, v ->
+            positions.forEach { (_, v) ->
                 Lines.beginLine()
                 v.first.forEach { Lines.linePoint(it) }
                 Lines.endLine()
