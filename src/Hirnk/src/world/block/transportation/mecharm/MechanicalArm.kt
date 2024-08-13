@@ -1,16 +1,17 @@
 package Hirnk.src.world.block.transportation.mecharm
 
+import Hirnk.src.util.UntitledMath.ang
 import Hirnk.src.util.ik.IKSolver.solve
 import arc.func.Prov
 import arc.graphics.g2d.Draw
 import arc.graphics.g2d.Lines
 import arc.math.geom.Vec2
-import arc.util.Time
 import arc.util.Tmp
 import mindustry.Vars
 import mindustry.gen.Building
 import mindustry.graphics.Drawf
 import mindustry.graphics.Pal
+import mindustry.type.ItemStack
 import mindustry.world.Block
 import mindustry.world.meta.BlockGroup
 import plumy.core.math.normal
@@ -19,7 +20,7 @@ import plumy.dsl.config
 
 class MechanicalArm(name: String) : Block(name) {
     var payloadAmount = 8
-    var payloadTime = 20f
+    var payloadTime = 60f
     var arm: Arm = EmptyArm
 
     fun range(): Float {
@@ -49,16 +50,16 @@ class MechanicalArm(name: String) : Block(name) {
     }
 
     fun MechanicalArmBuild.validConnect(other: Building)
-        = dst(other) <= range()
-
-    enum class ArmState { INPUT, OUTPUT, IDLE }
-    enum class Indexing { INPUT, OUTPUT }
+        = other.block.hasItems && dst(other) <= range()
 
     inner class MechanicalArmBuild : Building() {
         var inputMode = true
         var progress = 0f
-        var state = ArmState.IDLE
-        var index = 0
+        var payload = ItemStack()
+
+        var indexIn = 0
+        var indexOut = 0
+        var carrying = false
 
         val mover by lazy { Pair(
             Array(arm.joints + 2) { Vec2(arm.offset[it] + x, y) },
@@ -71,48 +72,51 @@ class MechanicalArm(name: String) : Block(name) {
 
         var offsetSpeed = FloatArray(arm.joints + 1) { 0f }
 
+        override fun created() {
+            obtainTarget()
+        }
+
         override fun updateTile() {
             progress += getProgressIncrease(payloadTime)
 
-            when (state) {
-                ArmState.INPUT -> {
-                    if (progress < 1f) {
-                        for (i in 0 until arm.joints + 1) {
-                            val vert = mover.first
-                            val a = mover.second
-                            val s = offsetSpeed[i] * Time.delta
+            if (progress <= 1f) {
+                for (i in 0 until arm.joints + 1) {
+                    val vert = mover.first
 
-                            for (j in i until arm.joints + 1) {
-                                a[j] += s
-                                vert[j + 1].set(Tmp.v1.trns(a[j], arm.offset[j + 1] - arm.offset[j]).add(vert[i]))
-                            }
-                        }
-                    } else {
-                        setOffset(inputs[0])
-                        state = ArmState.IDLE
-                    }
+                    vert[i + 1].trns(
+                        offsetSpeed[i] * progress,
+                        arm.offset[i + 1] - arm.offset[i]
+                    ).add(vert[i])
                 }
-                ArmState.OUTPUT -> {
-                    if (progress < 1f) {
+            } else {
+                progress -= 1
 
-                    } else state = ArmState.IDLE
-                }
-                ArmState.IDLE -> {
-                    if (inputs.size >= 1) {
-                        state = ArmState.INPUT
-                    }
-                }
+                obtainTarget() ?: return
             }
+        }
 
-            progress %= 1
+        fun obtainTarget(): Building? {
+            var target: Building? = null
+
+            if (!carrying && inputs.size > 0) {
+                indexIn = (indexIn + 1) % inputs.size
+                target = inputs[indexIn]
+                setOffset(target)
+                carrying = false
+            } else if (outputs.size > 0) {
+                indexOut = (indexOut + 1) % outputs.size
+                target = outputs[indexOut]
+                setOffset(target)
+                carrying = true
+            } else {
+                offsetSpeed.forEachIndexed { i, _ -> offsetSpeed[i] = 0f }
+            }
+            return target
         }
 
         fun setOffset(other: Building) {
-            var s = 0f
             for (i in offsetSpeed.indices) {
-                val speed = (positions[other.pos()]!!.second[i] - mover.second[i]) / payloadTime - s
-                s += speed
-                offsetSpeed[i] = speed
+                offsetSpeed[i] = (positions[other.pos()]!!.second[i] - mover.second[i])
             }
         }
 
@@ -131,7 +135,7 @@ class MechanicalArm(name: String) : Block(name) {
             Tmp.v2.set(1f, 0f)
 
             val angles = FloatArray(arm.joints + 1) { i ->
-                Tmp.v1.set(pos[i + 1]).sub(pos[i]).angle()
+                Tmp.v1.set(pos[i + 1]).sub(pos[i]).ang()
             }
 
             positions[building.pos()] = Pair(pos, angles)
