@@ -16,11 +16,22 @@ java {
 repositories{
     mavenCentral()
     maven{ url "https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository" }
+    maven{ url 'https://raw.githubusercontent.com/Zelaux/Repo/master/repository' }
     maven{ url 'https://www.jitpack.io' }
 }
+
+ext {
+    arcLibrary = {String module ->
+        return "com.github.Zelaux.ArcLibrary$module:$arcLibraryVersion"
+    }
+}
+
 dependencies{
     compileOnly "com.github.Anuken.Arc:arc-core:v146"
     compileOnly "com.github.Anuken.Mindustry:core:v146"
+
+    implementation "${arcLibrary(':graphics-draw3d')}"
+
     annotationProcessor "com.github.Anuken:jabel:93fde537c7"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"

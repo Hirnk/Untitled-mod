@@ -10,6 +10,7 @@ import Hirnk.src.world.block.transportation.grid.GridNode
 import Hirnk.src.world.block.transportation.grid.GridPort
 import Hirnk.src.world.block.transportation.mecharm.Arm
 import Hirnk.src.world.block.transportation.mecharm.MechanicalArm
+import Hirnk.src.world.draw.DrawRod
 import Hirnk.src.world.draw.DrawPane
 import mindustry.content.*
 import mindustry.entities.effect.MultiEffect
@@ -21,6 +22,7 @@ import mindustry.type.Category
 import mindustry.type.ItemStack
 import mindustry.world.Block
 import mindustry.world.blocks.defense.turrets.PowerTurret
+import mindustry.world.blocks.defense.turrets.Turret
 import mindustry.world.blocks.environment.SteamVent
 import mindustry.world.blocks.liquid.LiquidRouter
 import mindustry.world.consumers.ConsumeItems
@@ -32,6 +34,7 @@ import plumy.dsl.DrawMulti
 object UntitledBlocks {
     //turret
     lateinit var concentrate: Block
+    lateinit var rod: Block
     //transportation
     lateinit var transporter: Block
     lateinit var itemNode: Block
@@ -116,6 +119,20 @@ object UntitledBlocks {
                 }
             }
             limitRange(8f)
+        }
+
+        rod = Turret("rod").apply {
+            requirements(Category.turret, ItemStack.with(Items.copper, 45, Items.lead, 20))
+            health = 950
+            armor = 4f
+            size = 2
+            customShadow = true
+            outlineIcon = false
+
+            drawer = DrawMulti {
+                +DrawDefault()
+                +DrawRod()
+            }
         }
 
         transporter = MechanicalArm("transporter").apply {

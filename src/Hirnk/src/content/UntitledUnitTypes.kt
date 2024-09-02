@@ -1,12 +1,17 @@
 package Hirnk.src.content
 
 import Hirnk.src.entities.bullet.PointMinerBulletType
-import Hirnk.src.entities.parts.StaticPart
 import arc.func.Prov
+import arc.graphics.Color
+import arc.util.Time
 import mindustry.content.Fx
 import mindustry.content.StatusEffects
+import mindustry.entities.bullet.BasicBulletType
 import mindustry.entities.bullet.BulletType
 import mindustry.entities.effect.MultiEffect
+import mindustry.entities.part.DrawPart
+import mindustry.entities.part.RegionPart
+import mindustry.gen.MechUnit
 import mindustry.gen.Sounds
 import mindustry.gen.UnitEntity
 import mindustry.graphics.Pal
@@ -17,6 +22,7 @@ import mindustry.type.weapons.PointDefenseWeapon
 object UntitledUnitTypes {
     lateinit var prospector: UnitType
     lateinit var dredger: UnitType
+    lateinit var cogwheel: UnitType
 
     fun load() {
         prospector = UnitType("prospector").apply {
@@ -49,7 +55,6 @@ object UntitledUnitTypes {
                     mirror = false
                     reload = 80f
                     cooldownTime = 60f
-                    parts.add(StaticPart())
                     shootSound = Sounds.blaster
 
                     bullet = PointMinerBulletType().apply {
@@ -104,6 +109,52 @@ object UntitledUnitTypes {
             )
 
             constructor = Prov { UnitEntity.create() }
+        }
+
+        cogwheel = UnitType("cogwheel").apply {
+            hitSize = 14f
+            speed = 0.7f
+            rotateSpeed = 3f
+            health = 870f
+            armor = 2f
+            itemCapacity = 5
+
+            outlineColor = Color.valueOf("433c4c")
+
+            constructor = Prov { MechUnit.create() }
+
+            parts.add(RegionPart("-cog").apply {
+                moveRot = 360f
+                progress = DrawPart.PartProgress { p -> ((Time.time / 180f) % 1f * (p.warmup + 1f)) % 1f }
+                y = -2f
+                layerOffset = -0.01f
+            })
+
+            weapons.add(Weapon("untitled-mod-cogwheel-gun").apply {
+                reload = 40f
+                ejectEffect = Fx.casing2
+                shootSound = Sounds.shootBig
+                soundPitchMax = 1.3f
+                top = false
+                recoil = 0.4f
+                x = 9.5f
+                y = 3.75f
+
+                shoot.apply {
+                    shots = 3
+                    shotDelay = 5f
+                }
+
+                bullet = BasicBulletType(5.2f, 25f).apply {
+                    width = 6f
+                    height = 9f
+                    lifetime = 60f
+                    trailColor = Pal.bulletYellowBack
+                    trailLength = 8
+                    trailScl = 0.6f
+                    recoil = 1f
+                }
+            })
         }
     }
 }

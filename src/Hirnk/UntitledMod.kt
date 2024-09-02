@@ -29,5 +29,7 @@ class UntitledMod : Mod() {
         Events.on(ClientLoadEvent::class.java) {
             UntitledUI.init()
         }
+
+        //DebugDialog.oreGenerator()
     }
 }
