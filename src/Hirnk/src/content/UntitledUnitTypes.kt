@@ -134,6 +134,7 @@ object UntitledUnitTypes {
                 reload = 40f
                 ejectEffect = Fx.casing2
                 shootSound = Sounds.shootBig
+                shootWarmupSpeed = 0.04f
                 soundPitchMax = 1.3f
                 top = false
                 recoil = 0.4f
@@ -150,8 +151,8 @@ object UntitledUnitTypes {
                     height = 9f
                     lifetime = 60f
                     trailColor = Pal.bulletYellowBack
-                    trailLength = 8
-                    trailScl = 0.6f
+                    trailLength = 5
+                    trailScl = 0.3f
                     recoil = 1f
                 }
             })
