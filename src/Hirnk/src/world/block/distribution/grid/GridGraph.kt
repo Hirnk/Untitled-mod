@@ -9,8 +9,9 @@ import arc.util.pooling.Pool
 import arc.util.pooling.Pools
 import plumy.pathkt.*
 
+//todo refactor
 class GridGraph {
-    val entity = GridGraphUpdater.create().apply {
+    val entity = GraphUpdater.create().apply {
         graph = this@GridGraph
     }
     val all = Seq<IGridNode>(false, 16, IGridNode::class.java)

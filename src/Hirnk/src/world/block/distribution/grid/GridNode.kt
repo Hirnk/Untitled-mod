@@ -19,7 +19,7 @@ import plumy.dsl.config
 class GridNode(name: String) : GridBlock(name) {
     var range = 200f
     var stroke = 8f
-    var connections = 400
+    var connections = 7
 
     lateinit var bridgeRegion: TR
     lateinit var bridgeOutlineRegion: TR

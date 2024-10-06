@@ -1,4 +1,4 @@
-package Hirnk.src.world.block.distribution.grid
+package Hirnk.src.world.graph
 
 import arc.util.io.Reads
 import arc.util.io.Writes
@@ -9,13 +9,14 @@ import mindustry.gen.Groups
 import mindustry.gen.Unitc
 
 @Suppress("UNCHECKED_CAST")
-open class GridGraphUpdater : Entityc {
+
+open class GraphEntity<T : Graph<T>> : Entityc {
     @Transient @JvmField
     protected var added: Boolean = false
     @Transient @JvmField
     var id: Int = EntityGroup.nextId()
 
-    var graph: GridGraph? = null
+    var graph: Graph<T>? = null
 
     override fun <T : Entityc> self(): T = this as T
     override fun <T : Any?> `as`(): T = this as T
@@ -65,9 +66,5 @@ open class GridGraphUpdater : Entityc {
     }
 
     override fun write(writes: Writes) {
-    }
-
-    companion object{
-        fun create() = GridGraphUpdater()
     }
 }
