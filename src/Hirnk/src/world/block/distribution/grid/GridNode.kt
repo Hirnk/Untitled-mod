@@ -16,10 +16,11 @@ import plumy.core.assets.TR
 import plumy.dsl.castBuild
 import plumy.dsl.config
 
+//todo properly implement connecting
 class GridNode(name: String) : GridBlock(name) {
     var range = 200f
     var stroke = 8f
-    var connections = 7
+    var connections = 4
 
     lateinit var bridgeRegion: TR
     lateinit var bridgeOutlineRegion: TR
