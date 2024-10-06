@@ -4,12 +4,13 @@ import Hirnk.src.entities.bullet.VelHomingType
 import Hirnk.src.world.block.crafter.MultiCrafter
 import Hirnk.src.world.block.crafter.recipe.Recipe
 import Hirnk.src.world.block.crafter.recipe.RecipeProgress
+import Hirnk.src.world.block.distribution.fluid.GasPipe
 import Hirnk.src.world.block.environment.PulseCrystal
 import Hirnk.src.world.block.storage.UntitledCore
-import Hirnk.src.world.block.transportation.grid.GridNode
-import Hirnk.src.world.block.transportation.grid.GridPort
-import Hirnk.src.world.block.transportation.mecharm.Arm
-import Hirnk.src.world.block.transportation.mecharm.MechanicalArm
+import Hirnk.src.world.block.distribution.grid.GridNode
+import Hirnk.src.world.block.distribution.grid.GridPort
+import Hirnk.src.world.block.distribution.mecharm.Arm
+import Hirnk.src.world.block.distribution.mecharm.MechanicalArm
 import Hirnk.src.world.draw.DrawRod
 import Hirnk.src.world.draw.DrawPane
 import mindustry.content.*
@@ -40,6 +41,7 @@ object UntitledBlocks {
     lateinit var itemNode: Block
     lateinit var itemPort: Block
     //fluid
+    lateinit var copperPipe: Block
     lateinit var copperTank: Block
     lateinit var copperTankBig: Block
     //crafter
@@ -160,6 +162,14 @@ object UntitledBlocks {
             armor = 2f
             size = 3
             itemCapacity = 80
+        }
+
+        copperPipe = GasPipe("gas-pipe").apply {
+            requirements(Category.liquid, ItemStack.with(Items.copper, 20, Items.lead, 20))
+            health = 220
+            size = 1
+            liquidCapacity = 20f
+            squareSprite = false
         }
 
         copperTank = LiquidRouter("copper-tank-2").apply {

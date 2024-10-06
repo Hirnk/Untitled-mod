@@ -1,4 +1,4 @@
-package Hirnk.src.world.block.transportation.grid
+package Hirnk.src.world.block.distribution.grid
 
 import Hirnk.src.content.UntitledMisc
 import arc.Core

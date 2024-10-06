@@ -1,4 +1,4 @@
-package Hirnk.src.world.block.transportation.mecharm
+package Hirnk.src.world.block.distribution.mecharm
 
 import Hirnk.src.util.UntitledMath.ang
 import Hirnk.src.util.ik.IKSolver.solve

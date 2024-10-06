@@ -15,6 +15,8 @@ class DrawPane : DrawBlock() {
     var size = 8f
     var panes = 8
     var rotSpeed = 6f
+    var x = 0f
+    var y = 0f
 
     lateinit var cylinderRegion1: TR
     lateinit var cylinderRegion2: TR
@@ -31,9 +33,9 @@ class DrawPane : DrawBlock() {
         for (i in 0 until panes) {
             val a = (offset * i + rot) % 360f
             if (a >= 180f) continue
-            UntitledDrawf.drawPane(cylinderRegion1, b.x, b.y, a, size, width, height)
+            UntitledDrawf.drawPane(cylinderRegion1, b.x + x, b.y + y, a, size, width, height)
             Draw.alpha(1f - Mathf.cosDeg(a * 0.5f))
-            UntitledDrawf.drawPane(cylinderRegion2, b.x, b.y, a, size, width, height)
+            UntitledDrawf.drawPane(cylinderRegion2, b.x + x, b.y + y, a, size, width, height)
             Draw.alpha(1f)
         }
     }

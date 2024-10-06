@@ -1,9 +1,9 @@
 package Hirnk.src.entities.special
 
 import Hirnk.src.content.UntitledMisc
-import Hirnk.src.world.block.transportation.grid.EmptyNode.isConnected
-import Hirnk.src.world.block.transportation.grid.GridNode
-import Hirnk.src.world.block.transportation.grid.Path
+import Hirnk.src.world.block.distribution.grid.EmptyNode.isConnected
+import Hirnk.src.world.block.distribution.grid.GridNode
+import Hirnk.src.world.block.distribution.grid.Path
 import arc.Core
 import arc.graphics.g2d.Draw
 import arc.math.Mathf

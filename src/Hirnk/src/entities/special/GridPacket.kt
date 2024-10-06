@@ -1,7 +1,7 @@
 package Hirnk.src.entities.special
 
-import Hirnk.src.world.block.transportation.grid.GridGraph
-import Hirnk.src.world.block.transportation.grid.IGridNode
+import Hirnk.src.world.block.distribution.grid.GridGraph
+import Hirnk.src.world.block.distribution.grid.IGridNode
 import arc.math.geom.Position
 import arc.util.io.Reads
 import arc.util.io.Writes
