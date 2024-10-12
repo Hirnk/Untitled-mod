@@ -1,21 +1,28 @@
 package Hirnk.src.world.graph
 
+import Hirnk.src.world.graph.GraphVertex.Companion.link1
 import arc.struct.IntSet
 import arc.struct.Queue
 import arc.struct.Seq
 
-class Graph<T : Graph<T>> {
-    val entity = GraphEntity<T>()
+
+@Suppress("UNCHECKED_CAST")
+open class Graph<T : Graph<T>> {
+    val entity: GraphEntity<T> = GraphEntity<T>().apply {
+        graph = this@Graph
+    }
     val all = Seq<GraphVertex<T>>(false, 16, GraphVertex::class.java)
+
+    private val queue = Queue<GraphVertex<T>>()
 
     val size: Int
         get() = all.size
 
-    fun update() {
+    open fun update() {
     }
 
     fun initNode(node: GraphVertex<T>) {
-
+        add(node)
     }
 
     fun onNodeChanged() {
@@ -27,7 +34,7 @@ class Graph<T : Graph<T>> {
         entity.remove()
     }
 
-    private fun merge(node: GraphVertex<T>) {
+    fun merge(node: GraphVertex<T>) {
         if (node.graph == this) return
         node.graph.entity.remove()
 
@@ -38,10 +45,16 @@ class Graph<T : Graph<T>> {
 
         while (queue.size > 0) {
             val child = queue.removeFirst()
+            add(child)
+            for (next in child.linked) {
+                if (closedSet.add(next.pos())) {
+                    queue.addLast(next as GraphVertex<T>?)
+                }
+            }
         }
     }
 
-    private fun add(node: GraphVertex<T>) {
+    fun add(node: GraphVertex<T>) {
         if (node.graph != this || !node.graphInit) {
             node.graph = this
             node.graphInit = true
@@ -51,10 +64,37 @@ class Graph<T : Graph<T>> {
         }
     }
 
-    companion object {
-        private val queue = Queue<GraphVertex<*>>()
-        private val closedSet = IntSet()
+    fun unlink(from: GraphVertex<T>) {
+        for (link in from.linked) {
+            if (link.graph != this) continue
 
+            val l = link as GraphVertex<T>
+
+            val new = Graph<T>()
+
+            new.add(l)
+
+            queue.clear()
+            queue.addLast(l)
+
+            while (queue.size > 0) {
+                val child = queue.removeFirst()
+                new.add(child)
+
+                for (next in child.link1) {
+                    if (next != from && next.graph != new) {
+                        val n = next as GraphVertex<T>
+
+                        new.add(n)
+                        queue.addLast(n)
+                    }
+                }
+            }
+        }
+        entity.remove()
+    }
+
+    companion object {
+        private val closedSet = IntSet()
     }
 }
-

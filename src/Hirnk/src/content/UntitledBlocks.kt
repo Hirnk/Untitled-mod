@@ -4,15 +4,17 @@ import Hirnk.src.entities.bullet.VelHomingType
 import Hirnk.src.world.block.crafter.MultiCrafter
 import Hirnk.src.world.block.crafter.recipe.Recipe
 import Hirnk.src.world.block.crafter.recipe.RecipeProgress
-import Hirnk.src.world.block.distribution.fluid.GasPipe
-import Hirnk.src.world.block.environment.PulseCrystal
-import Hirnk.src.world.block.storage.UntitledCore
+import Hirnk.src.world.block.distribution.fluid.FluidPipe
+import Hirnk.src.world.block.distribution.fluid.FluidSource
+import Hirnk.src.world.block.distribution.fluid.FluidVoid
 import Hirnk.src.world.block.distribution.grid.GridNode
 import Hirnk.src.world.block.distribution.grid.GridPort
 import Hirnk.src.world.block.distribution.mecharm.Arm
 import Hirnk.src.world.block.distribution.mecharm.MechanicalArm
-import Hirnk.src.world.draw.DrawRod
+import Hirnk.src.world.block.environment.PulseCrystal
+import Hirnk.src.world.block.storage.UntitledCore
 import Hirnk.src.world.draw.DrawPane
+import Hirnk.src.world.draw.DrawRod
 import mindustry.content.*
 import mindustry.entities.effect.MultiEffect
 import mindustry.entities.effect.WaveEffect
@@ -30,6 +32,7 @@ import mindustry.world.consumers.ConsumeItems
 import mindustry.world.draw.DrawDefault
 import mindustry.world.draw.DrawRegion
 import mindustry.world.meta.Attribute
+import mindustry.world.meta.BuildVisibility
 import plumy.dsl.DrawMulti
 
 object UntitledBlocks {
@@ -44,6 +47,8 @@ object UntitledBlocks {
     lateinit var copperPipe: Block
     lateinit var copperTank: Block
     lateinit var copperTankBig: Block
+    lateinit var fluidSource: Block
+    lateinit var fluidVoid: Block
     //crafter
     lateinit var centrifuge: Block
     lateinit var refinery: Block
@@ -164,7 +169,7 @@ object UntitledBlocks {
             itemCapacity = 80
         }
 
-        copperPipe = GasPipe("gas-pipe").apply {
+        copperPipe = FluidPipe("gas-pipe").apply {
             requirements(Category.liquid, ItemStack.with(Items.copper, 20, Items.lead, 20))
             health = 220
             size = 1
@@ -192,6 +197,16 @@ object UntitledBlocks {
             liquidPadding = 8f
         }
 
+        fluidSource = FluidSource("fluid-source").apply {
+            requirements(Category.liquid, BuildVisibility.sandboxOnly, ItemStack.with())
+            alwaysUnlocked = true
+        }
+
+        fluidVoid = FluidVoid("fluid-void").apply {
+            requirements(Category.liquid, BuildVisibility.sandboxOnly, ItemStack.with())
+            alwaysUnlocked = true
+        }
+
         centrifuge = MultiCrafter("centrifuge").apply {
             requirements(Category.crafting, ItemStack.with(Items.copper, 80, Items.lead, 20))
             health = 750
@@ -213,7 +228,7 @@ object UntitledBlocks {
         }
 
         refinery = MultiCrafter("refinery").apply {
-            requirements(Category.liquid, ItemStack.with(Items.copper, 45*4, Items.lead, 20*4))
+            requirements(Category.production, ItemStack.with(Items.copper, 45*4, Items.lead, 20*4))
             health = 3200
             armor = 6f
             size = 4

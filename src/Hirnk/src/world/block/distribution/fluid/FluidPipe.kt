@@ -3,13 +3,12 @@ package Hirnk.src.world.block.distribution.fluid
 import Hirnk.src.util.sheet
 import arc.func.Prov
 import arc.graphics.g2d.Draw
+import arc.graphics.g2d.Lines
 import arc.graphics.g2d.TextureRegion
-import mindustry.gen.Building
-import mindustry.world.Block
+import mindustry.Vars
 
 //todo fix silly code
-class GasPipe(name: String) : Block(name) {
-    var tileOffset = 3
+class FluidPipe(name: String) : FluidBlock(name) {
 
     lateinit var regions: Array<TextureRegion>
 
@@ -19,14 +18,10 @@ class GasPipe(name: String) : Block(name) {
     }
 
     init {
-        update = true
-        solid = true
-        hasLiquids = true
-
-        buildType = Prov { GasPipeBuild() }
+        buildType = Prov { FluidPipeBuild() }
     }
 
-    inner class GasPipeBuild : Building(), GasBuild {
+    inner class FluidPipeBuild : FluidBuild() {
         var index = 0
 
         fun updateIndex() {
@@ -34,7 +29,7 @@ class GasPipe(name: String) : Block(name) {
 
             for (i in 0 until 4) {
                 val b = nearby((4 - i) % 4)
-                if (b is GasBuild) newIndex += 1 shl i
+                if (b is IFluidBuild) newIndex += 1 shl i
 
             }
 
@@ -43,7 +38,7 @@ class GasPipe(name: String) : Block(name) {
 
                 for (i in 0 until 4) {
                     val b = nearby((4 - i) % 4)
-                    if (b is GasPipeBuild && b.isStraight()) b.updateIndex()
+                    if (b is FluidPipeBuild && b.isStraight()) b.updateIndex()
                 }
             }
 
@@ -57,7 +52,7 @@ class GasPipe(name: String) : Block(name) {
 
             for (i in 0 until 2) {
                 val b = nearby((4 - (i * 2 + o)) % 4)
-                if (b is GasPipeBuild && !b.isStraight()) sIndex += 1 shl i
+                if (b is FluidPipeBuild && !b.isStraight()) sIndex += 1 shl i
             }
 
             if (sIndex != 0) when (index) {
@@ -71,10 +66,16 @@ class GasPipe(name: String) : Block(name) {
         override fun onProximityUpdate() {
             super.onProximityUpdate()
             updateIndex()
+
+            updateProximateLink()
         }
 
         override fun draw() {
             Draw.rect(regions[index], x, y)
+
+            Draw.alpha(fluidAmount / fluidCapacity)
+            Lines.square(x, y, Vars.tilesize / 2.5f, 0f)
+            Draw.alpha(1f)
         }
     }
 }
